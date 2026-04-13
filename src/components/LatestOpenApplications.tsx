@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { type Locale } from "@/lib/content";
+import { dictionary } from "@/i18n";
 import {
   type Opportunity,
   formatDate,
@@ -12,45 +13,6 @@ import {
 import { client } from "@/sanity/client";
 import { urlFor } from "@/sanity/image";
 import { OPPORTUNITIES_QUERY } from "@/sanity/queries";
-
-const content = {
-  pt: {
-    titleOpen: "Candidaturas abertas",
-    titleRecent: "Oportunidades recentes",
-    introOpen:
-      "As oportunidades mais recentes que ainda estão com candidaturas abertas.",
-    introRecent:
-      "De momento não há candidaturas abertas, mas ainda podes consultar algumas oportunidades recentes.",
-    deadline: "Data limite",
-    projectDates: "Datas do projeto",
-    infopack: "Infopack",
-    apply: "Application Form",
-    all: "Ver todas as oportunidades",
-    closedBanner: "Fechado",
-    comingSoonEyebrow: "Em breve",
-    comingSoonTitle: "Mais oportunidades a chegar",
-    comingSoonText:
-      "Estamos sempre a partilhar novas oportunidades. Consulta a página completa para veres todas as candidaturas e volta em breve para descobrir mais.",
-  },
-  en: {
-    titleOpen: "Open applications",
-    titleRecent: "Recent opportunities",
-    introOpen:
-      "The most recent opportunities that are still open for applications.",
-    introRecent:
-      "There are no open applications right now, but you can still explore some recent opportunities.",
-    deadline: "Application deadline",
-    projectDates: "Project dates",
-    infopack: "Infopack",
-    apply: "Application Form",
-    all: "See all opportunities",
-    closedBanner: "Closed",
-    comingSoonEyebrow: "Coming soon",
-    comingSoonTitle: "More opportunities on the way",
-    comingSoonText:
-      "We are always sharing new opportunities. Visit the full page to explore all applications and come back soon to discover more.",
-  },
-} as const;
 
 type DisplayCard =
   | {
@@ -143,14 +105,14 @@ function buildDisplayCards(opportunities: Opportunity[]): DisplayCard[] {
 function OpportunityCard({
   item,
   locale,
-  labels,
   status,
 }: {
   item: Opportunity;
   locale: Locale;
-  labels: (typeof content)[Locale];
   status: "open" | "closed";
 }) {
+  const labels = dictionary[locale].latestOpenApplications;
+
   const imageUrl = item.thumbnail
     ? urlFor(item.thumbnail).width(900).height(600).fit("crop").url()
     : null;
@@ -243,13 +205,9 @@ function OpportunityCard({
   );
 }
 
-function PlaceholderCard({
-  locale,
-  labels,
-}: {
-  locale: Locale;
-  labels: (typeof content)[Locale];
-}) {
+function PlaceholderCard({ locale }: { locale: Locale }) {
+  const labels = dictionary[locale].latestOpenApplications;
+
   return (
     <article className="min-w-[85vw] snap-start rounded-[1.75rem] border border-dashed border-[var(--brand)]/30 bg-[var(--cream)] p-6 md:min-w-0">
       <p className="text-sm uppercase tracking-[0.16em] text-[var(--brand)]/80">
@@ -281,7 +239,7 @@ export default async function LatestOpenApplications({
 }: {
   locale: Locale;
 }) {
-  const labels = content[locale];
+  const labels = dictionary[locale].latestOpenApplications;
 
   const opportunities = await client.fetch<Opportunity[]>(
     OPPORTUNITIES_QUERY,
@@ -317,7 +275,6 @@ export default async function LatestOpenApplications({
                 <PlaceholderCard
                   key={`placeholder-${index}`}
                   locale={locale}
-                  labels={labels}
                 />
               );
             }
@@ -327,7 +284,6 @@ export default async function LatestOpenApplications({
                 key={`${card.status}-${card.item._id}`}
                 item={card.item}
                 locale={locale}
-                labels={labels}
                 status={card.status}
               />
             );

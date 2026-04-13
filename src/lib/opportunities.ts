@@ -11,6 +11,10 @@ export type Opportunity = {
   country?: string;
   countryEn?: string;
   city?: string;
+  participantSpots?: number;
+  ageMin?: number;
+  ageMax?: number;
+  showMembershipNote?: boolean;
   projectStartDate?: string;
   projectEndDate?: string;
   publishDate?: string;
@@ -99,4 +103,24 @@ export function formatKind(kind: Opportunity["kind"], locale: Locale) {
 
   if (!kind) return "";
   return labels[locale][kind] || kind;
+}
+
+export function formatAgeRange(
+  ageMin: number | undefined,
+  ageMax: number | undefined,
+  locale: Locale
+) {
+  if (ageMin && ageMax) {
+    return `${ageMin}–${ageMax}`;
+  }
+
+  if (ageMin) {
+    return locale === "pt" ? `${ageMin}+ anos` : `${ageMin}+`;
+  }
+
+  if (ageMax) {
+    return locale === "pt" ? `Até ${ageMax}` : `Up to ${ageMax}`;
+  }
+
+  return "";
 }
