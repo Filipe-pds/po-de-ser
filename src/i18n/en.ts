@@ -151,7 +151,7 @@ refundText:
   "If a participant withdraws from the project after purchasing their trip, they will not receive a refund.",
 membershipTitle: "Pó de Ser membership",
 membershipText:
-  "All selected participants must become members of Associação Pó de Ser. The annual membership fee costs €18 (€1.5/month). If you do not have the financial means, it should not be a barrier to your participation. Let us know 🙂",  fundingTitle: "Erasmus+ funding",
+  "All selected participants must become members of Associação Pó de Ser. The annual membership fee costs €18 (€1.5/month). If you do not have the financial means, it should not be a barrier to your participation. Let us know 🙂",  
   empty: "There are no visible opportunities at the moment.",
   infopack: "Infopack",
   apply: "Application Form",
