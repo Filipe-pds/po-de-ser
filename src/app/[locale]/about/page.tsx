@@ -1,7 +1,9 @@
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import { teamMembers } from "@/data/team";
 import { dictionary } from "@/i18n";
 import { locales, type Locale } from "@/lib/content";
 
@@ -18,6 +20,19 @@ export default async function AboutPage({
 
   const currentLocale = locale as Locale;
   const t = dictionary[currentLocale];
+
+  const teamSection =
+    currentLocale === "pt"
+      ? {
+          title: "Equipa",
+          intro:
+            "A Pó de Ser é construída por pessoas com diferentes experiências, sensibilidades e competências, unidas pela vontade de criar oportunidades significativas para jovens.",
+        }
+      : {
+          title: "Team",
+          intro:
+            "Pó de Ser is built by people with different experiences, sensitivities, and skills, united by the desire to create meaningful opportunities for young people.",
+        };
 
   return (
     <>
@@ -103,6 +118,137 @@ export default async function AboutPage({
                     {stat.label}
                   </p>
                 </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-[var(--soft)]">
+          <div className="mx-auto max-w-6xl px-6 py-20">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl font-semibold text-[var(--ink)]">
+                {teamSection.title}
+              </h2>
+              <p className="mt-4 text-lg leading-8 text-[var(--muted)]">
+                {teamSection.intro}
+              </p>
+            </div>
+
+            <div className="mt-14 grid gap-x-10 gap-y-16 md:grid-cols-2 xl:grid-cols-3">
+              {teamMembers.map((member) => (
+                <article key={member.name} className="relative">
+                  <div className="group relative">
+                    <div className="relative aspect-[4/4] overflow-visible">
+                      <div className="relative h-full w-full overflow-hidden rounded-t-[1.75rem] bg-[var(--cream)]">
+                        <Image
+                          src={member.image}
+                          alt={member.name}
+                          fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                          className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                        />
+
+                        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/8 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                      </div>
+
+                      {member.creatureLeft ? (
+                        <Image
+                          src={member.creatureLeft}
+                          alt={member.creatureLeftAlt || "Creature"}
+                          width={member.creatureLeftSize || 150}
+                          height={member.creatureLeftSize || 150}
+                          className={`pointer-events-none absolute z-10 hidden rotate-[-14deg] opacity-0 transition-all duration-500 group-hover:opacity-100 md:block ${
+                            member.creatureLeftClass ||
+                            "left-[-1.25rem] top-[2.5rem] group-hover:left-[-2rem] group-hover:top-[-0.75rem]"
+                          }`}
+                        />
+                      ) : null}
+
+                      {member.creatureRight ? (
+                        <Image
+                          src={member.creatureRight}
+                          alt={member.creatureRightAlt || "Creature"}
+                          width={member.creatureRightSize || 150}
+                          height={member.creatureRightSize || 150}
+                          className={`pointer-events-none absolute z-10 hidden rotate-[14deg] opacity-0 transition-all duration-500 group-hover:opacity-100 md:block ${
+                            member.creatureRightClass ||
+                            "right-[-1.25rem] top-[2.5rem] group-hover:right-[-2rem] group-hover:top-[-0.75rem]"
+                          }`}
+                        />
+                      ) : null}
+
+                      {member.foregroundImage ? (
+                        <Image
+                          src={member.foregroundImage}
+                          alt={member.name}
+                          fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                          className="pointer-events-none absolute inset-0 z-20 object-cover"
+                        />
+                      ) : null}
+                    </div>
+
+                    <div className="rounded-b-[1.75rem] bg-white p-6 shadow-sm ring-1 ring-black/5">
+                      <h3 className="text-2xl font-semibold text-[var(--ink)]">
+                        {member.name}
+                      </h3>
+
+                      <p className="mt-2 text-sm uppercase tracking-[0.16em] text-[var(--brand)]">
+                        {member.role[currentLocale]}
+                      </p>
+
+                      <p className="mt-4 leading-7 text-[var(--muted)]">
+                        {member.bio[currentLocale]}
+                      </p>
+
+                      {member.links ? (
+                        <div className="mt-5 flex flex-wrap gap-3">
+                          {member.links.email ? (
+                            <a
+                              href={`mailto:${member.links.email}`}
+                              className="rounded-full border border-[var(--ink)] px-4 py-2 text-sm text-[var(--ink)] transition hover:bg-[var(--ink)] hover:text-white"
+                            >
+                              Email
+                            </a>
+                          ) : null}
+
+                          {member.links.instagram ? (
+                            <a
+                              href={member.links.instagram}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="rounded-full border border-[var(--brand)] px-4 py-2 text-sm text-[var(--brand)] transition hover:bg-[var(--brand)] hover:text-white"
+                            >
+                              Instagram
+                            </a>
+                          ) : null}
+
+                          {member.links.linkedin ? (
+                            <a
+                              href={member.links.linkedin}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="rounded-full border border-[var(--brand)] px-4 py-2 text-sm text-[var(--brand)] transition hover:bg-[var(--brand)] hover:text-white"
+                            >
+                              LinkedIn
+                            </a>
+                          ) : null}
+
+                          {member.links.website ? (
+                            <a
+                              href={member.links.website}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="rounded-full border border-[var(--brand)] px-4 py-2 text-sm text-[var(--brand)] transition hover:bg-[var(--brand)] hover:text-white"
+                            >
+                              Website
+                            </a>
+                          ) : null}
+                        </div>
+                      ) : null}
+                    </div>
+                  </div>
+                </article>
               ))}
             </div>
           </div>
