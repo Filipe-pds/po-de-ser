@@ -2,181 +2,215 @@
 
 import { useEffect, useRef } from "react";
 
-type DustParticle = {
+type Particle = {
   x: number;
   y: number;
   vx: number;
   vy: number;
-  driftX: number;
-  driftY: number;
-  size: number;
+  r: number;
+  a: number;
   color: string;
-  alpha: number;
 };
 
-const colors = [
-  "255,255,255",
-  "239,230,220",
-  "214,177,132",
-  "155,55,53",
-  "120,189,175",
+const COLORS = [
+  "rgba(255,255,255,0.62)",
+  "rgba(221,206,176,0.5)",
+  "rgba(121,166,160,0.36)",
+  "rgba(155,55,53,0.22)",
 ];
 
 export default function HeroDustBackground() {
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const wrapperRef = useRef<HTMLDivElement | null>(null);
-  const mouseRef = useRef({
-    x: 0,
-    y: 0,
-    active: false,
-  });
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const wrapper = wrapperRef.current;
-    if (!canvas || !wrapper) return;
+    const initialContainer = containerRef.current;
+    const initialCanvas = canvasRef.current;
 
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    if (!initialContainer || !initialCanvas) return;
+
+    const maybeCtx = initialCanvas.getContext("2d");
+    if (!maybeCtx) return;
+
+    const ctx: CanvasRenderingContext2D = maybeCtx;
 
     let animationFrame = 0;
     let width = 0;
     let height = 0;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let dpr = 1;
 
-    const particles: DustParticle[] = Array.from({ length: 260 }, () => ({
-      x: Math.random() * 1600,
-      y: Math.random() * 900,
-      vx: (Math.random() - 0.5) * 0.22,
-      vy: (Math.random() - 0.5) * 0.16,
-      driftX: 0,
-      driftY: 0,
-      size: 0.8 + Math.random() * 2.8,
-      color: colors[Math.floor(Math.random() * colors.length)],
-      alpha: 0.14 + Math.random() * 0.42,
-    }));
+    const pointer = {
+      x: 0,
+      y: 0,
+      active: false,
+    };
 
-    const resizeCanvas = () => {
-      const rect = wrapper.getBoundingClientRect();
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    const particles: Particle[] = [];
+
+    function resize() {
+      const container = containerRef.current;
+      const canvas = canvasRef.current;
+      if (!container || !canvas) return;
+
+      const rect = container.getBoundingClientRect();
       width = rect.width;
       height = rect.height;
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
 
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      for (const p of particles) {
-        p.x = Math.random() * width;
-        p.y = Math.random() * height;
+      particles.length = 0;
+
+      const count = prefersReducedMotion
+        ? 18
+        : width < 768
+          ? 28
+          : width < 1200
+            ? 42
+            : 56;
+
+      for (let i = 0; i < count; i += 1) {
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.18,
+          vy: (Math.random() - 0.5) * 0.14,
+          r: Math.random() * 2.8 + 1.1,
+          a: Math.random() * 0.55 + 0.18,
+          color: COLORS[Math.floor(Math.random() * COLORS.length)],
+        });
       }
-    };
+    }
 
-    const handleMove = (event: MouseEvent) => {
-  const rect = wrapper.getBoundingClientRect();
-  mouseRef.current = {
-    x: event.clientX - rect.left,
-    y: event.clientY - rect.top,
-    active:
-      event.clientX >= rect.left &&
-      event.clientX <= rect.right &&
-      event.clientY >= rect.top &&
-      event.clientY <= rect.bottom,
-  };
-};
+    function drawBackground() {
+      const gradient = ctx.createLinearGradient(0, 0, width, height);
+      gradient.addColorStop(0, "#241f24");
+      gradient.addColorStop(0.42, "#30282f");
+      gradient.addColorStop(1, "#2a242b");
 
-    const handleLeave = () => {
-      mouseRef.current.active = false;
-    };
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, width, height);
 
-    const drawDust = (
-      x: number,
-      y: number,
-      size: number,
-      color: string,
-      alpha: number
-    ) => {
-      ctx.beginPath();
-      ctx.fillStyle = `rgba(${color}, ${alpha})`;
-      ctx.arc(x, y, size, 0, Math.PI * 2);
-      ctx.fill();
+      const glowLeft = ctx.createRadialGradient(
+        width * 0.15,
+        height * 0.82,
+        0,
+        width * 0.15,
+        height * 0.82,
+        width * 0.42
+      );
+      glowLeft.addColorStop(0, "rgba(155,55,53,0.26)");
+      glowLeft.addColorStop(1, "rgba(155,55,53,0)");
 
-      ctx.beginPath();
-      ctx.fillStyle = `rgba(${color}, ${alpha * 0.1})`;
-      ctx.arc(x, y, size * 2.1, 0, Math.PI * 2);
-      ctx.fill();
-    };
+      ctx.fillStyle = glowLeft;
+      ctx.fillRect(0, 0, width, height);
 
-    const animate = () => {
-      ctx.clearRect(0, 0, width, height);
+      const glowRight = ctx.createRadialGradient(
+        width * 0.82,
+        height * 0.2,
+        0,
+        width * 0.82,
+        height * 0.2,
+        width * 0.34
+      );
+      glowRight.addColorStop(0, "rgba(221,206,176,0.14)");
+      glowRight.addColorStop(1, "rgba(221,206,176,0)");
 
-      for (const particle of particles) {
-        if (mouseRef.current.active) {
-          const dx = particle.x - mouseRef.current.x;
-          const dy = particle.y - mouseRef.current.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+      ctx.fillStyle = glowRight;
+      ctx.fillRect(0, 0, width, height);
 
-          if (dist < 170) {
-            const force = (170 - dist) / 170;
-            particle.driftX += (dx / (dist || 1)) * force * 0.45;
-            particle.driftY += (dy / (dist || 1)) * force * 0.45;
+      const textFade = ctx.createLinearGradient(0, 0, width * 0.52, 0);
+      textFade.addColorStop(0, "rgba(0,0,0,0.24)");
+      textFade.addColorStop(1, "rgba(0,0,0,0)");
+
+      ctx.fillStyle = textFade;
+      ctx.fillRect(0, 0, width, height);
+    }
+
+    function drawParticles() {
+      for (const p of particles) {
+        let driftX = 0;
+        let driftY = 0;
+
+        if (pointer.active && !prefersReducedMotion) {
+          const dx = p.x - pointer.x;
+          const dy = p.y - pointer.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < 140 && distance > 0.001) {
+            const force = (140 - distance) / 140;
+            driftX = (dx / distance) * force * 0.22;
+            driftY = (dy / distance) * force * 0.22;
           }
         }
 
-        particle.x += particle.vx + particle.driftX;
-        particle.y += particle.vy + particle.driftY;
+        p.x += p.vx + driftX;
+        p.y += p.vy + driftY;
 
-        particle.driftX *= 0.965;
-        particle.driftY *= 0.965;
+        if (p.x < -10) p.x = width + 10;
+        if (p.x > width + 10) p.x = -10;
+        if (p.y < -10) p.y = height + 10;
+        if (p.y > height + 10) p.y = -10;
 
-        if (particle.x <= 0) {
-          particle.x = 0;
-          particle.vx = Math.abs(particle.vx) * 0.98;
-          particle.driftX = Math.abs(particle.driftX) * 0.75;
-        } else if (particle.x >= width) {
-          particle.x = width;
-          particle.vx = -Math.abs(particle.vx) * 0.98;
-          particle.driftX = -Math.abs(particle.driftX) * 0.75;
-        }
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r * 2.5, 0, Math.PI * 2);
+        ctx.fillStyle = p.color.replace(/[\d.]+\)\s*$/, `${p.a * 0.08})`);
+        ctx.fill();
 
-        if (particle.y <= 0) {
-          particle.y = 0;
-          particle.vy = Math.abs(particle.vy) * 0.98;
-          particle.driftY = Math.abs(particle.driftY) * 0.75;
-        } else if (particle.y >= height) {
-          particle.y = height;
-          particle.vy = -Math.abs(particle.vy) * 0.98;
-          particle.driftY = -Math.abs(particle.driftY) * 0.75;
-        }
-
-        drawDust(particle.x, particle.y, particle.size, particle.color, particle.alpha);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = p.color.replace(/[\d.]+\)\s*$/, `${p.a})`);
+        ctx.fill();
       }
+    }
 
-      animationFrame = window.requestAnimationFrame(animate);
-    };
+    function render() {
+      drawBackground();
+      drawParticles();
+      animationFrame = window.requestAnimationFrame(render);
+    }
 
-    resizeCanvas();
-    animate();
+    function handlePointerMove(event: PointerEvent) {
+      const container = containerRef.current;
+      if (!container) return;
 
-    window.addEventListener("resize", resizeCanvas);
-    window.addEventListener("mousemove", handleMove);
-window.addEventListener("mouseleave", handleLeave);
+      const rect = container.getBoundingClientRect();
+      pointer.x = event.clientX - rect.left;
+      pointer.y = event.clientY - rect.top;
+      pointer.active = true;
+    }
+
+    function handlePointerLeave() {
+      pointer.active = false;
+    }
+
+    resize();
+    render();
+
+    window.addEventListener("resize", resize);
+    initialContainer.addEventListener("pointermove", handlePointerMove);
+    initialContainer.addEventListener("pointerleave", handlePointerLeave);
 
     return () => {
-      window.removeEventListener("resize", resizeCanvas);
-     window.removeEventListener("mousemove", handleMove);
-window.removeEventListener("mouseleave", handleLeave);
       window.cancelAnimationFrame(animationFrame);
+      window.removeEventListener("resize", resize);
+      initialContainer.removeEventListener("pointermove", handlePointerMove);
+      initialContainer.removeEventListener("pointerleave", handlePointerLeave);
     };
   }, []);
 
   return (
-    <div ref={wrapperRef} className="absolute inset-0 z-0 overflow-hidden">
-      <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_15%_85%,rgba(155,55,53,0.42),transparent_24%),radial-gradient(circle_at_82%_14%,rgba(214,177,132,0.08),transparent_14%),linear-gradient(180deg,rgba(44,37,42,0.92)_0%,rgba(44,37,42,0.96)_100%)]" />
-
-      <canvas ref={canvasRef} className="absolute inset-0 z-[1] h-full w-full" />
+    <div ref={containerRef} className="absolute inset-0 overflow-hidden">
+      <canvas ref={canvasRef} className="absolute inset-0" />
     </div>
   );
 }
