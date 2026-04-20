@@ -4,10 +4,144 @@ import { notFound } from "next/navigation";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import ScrollReveal from "@/components/ScrollReveal";
-import ParallaxImage from "@/components/ParallaxImage";
-import DustEasterEgg from "@/components/DustEasterEgg";
 import HeroDustBackground from "@/components/HeroDustBackground";
+import HomePortalNode from "@/components/HomePortalNode";
 import { locales, type Locale } from "@/lib/content";
+import HomeMobilePortalCard from "@/components/HomeMobilePortalCard";
+
+type PortalVariant = "about" | "projects" | "opportunities";
+
+const mobilePortalTheme: Record<
+  PortalVariant,
+  {
+    border: string;
+    glow: string;
+    core: string;
+    mist: string;
+    spark: string;
+  }
+> = {
+  about: {
+    border: "rgba(245,229,202,0.72)",
+    glow:
+      "0 0 0 1px rgba(245,229,202,0.18), 0 0 22px rgba(245,229,202,0.16), inset 0 0 14px rgba(255,255,255,0.04)",
+    core:
+      "radial-gradient(circle at 50% 35%, rgba(245,229,202,0.12), rgba(37,30,34,0.86) 55%, rgba(15,12,15,1) 100%)",
+    mist:
+      "radial-gradient(circle at 50% 46%, rgba(245,229,202,0.08), transparent 52%)",
+    spark: "rgba(245,229,202,0.76)",
+  },
+  projects: {
+    border: "rgba(210,150,159,0.78)",
+    glow:
+      "0 0 0 1px rgba(210,150,159,0.20), 0 0 26px rgba(210,150,159,0.24), 0 0 48px rgba(121,166,160,0.10), inset 0 0 16px rgba(255,255,255,0.05)",
+    core:
+      "radial-gradient(circle at 50% 35%, rgba(210,150,159,0.16), rgba(38,24,38,0.86) 55%, rgba(12,10,16,1) 100%)",
+    mist:
+      "radial-gradient(circle at 50% 48%, rgba(255,255,255,0.04), transparent 56%)",
+    spark: "rgba(224,188,132,0.82)",
+  },
+  opportunities: {
+    border: "rgba(170,214,206,0.78)",
+    glow:
+      "0 0 0 1px rgba(170,214,206,0.20), 0 0 24px rgba(170,214,206,0.22), inset 0 0 16px rgba(255,255,255,0.05)",
+    core:
+      "radial-gradient(circle at 50% 35%, rgba(170,214,206,0.16), rgba(23,30,38,0.84) 55%, rgba(9,12,18,1) 100%)",
+    mist:
+      "radial-gradient(circle at 50% 46%, rgba(121,166,160,0.10), transparent 54%)",
+    spark: "rgba(170,214,206,0.84)",
+  },
+};
+
+const mobileSparkMap: Record<
+  PortalVariant,
+  { left: string; top: string; size: number }[]
+> = {
+  about: [
+    { left: "18%", top: "24%", size: 5 },
+    { left: "34%", top: "58%", size: 6 },
+    { left: "20%", top: "78%", size: 7 },
+  ],
+  projects: [
+    { left: "46%", top: "18%", size: 5 },
+    { left: "58%", top: "56%", size: 6 },
+    { left: "42%", top: "82%", size: 5 },
+  ],
+  opportunities: [
+    { left: "72%", top: "26%", size: 5 },
+    { left: "64%", top: "56%", size: 6 },
+    { left: "56%", top: "80%", size: 7 },
+  ],
+};
+
+function MobilePortalCard({
+  href,
+  title,
+  hoverText,
+  variant,
+}: {
+  href: string;
+  title: string;
+  hoverText: string;
+  variant: PortalVariant;
+}) {
+  const theme = mobilePortalTheme[variant];
+
+  return (
+    <Link
+      href={href}
+      className="group relative block overflow-hidden rounded-[2rem] border border-black/8 md:hidden"
+      style={{
+        background:
+          variant === "about"
+            ? "linear-gradient(180deg, #33272d 0%, #211b20 100%)"
+            : variant === "projects"
+              ? "linear-gradient(180deg, #2d2330 0%, #17131a 100%)"
+              : "linear-gradient(180deg, #2b313b 0%, #171d24 100%)",
+        boxShadow: "0 10px 28px rgba(0,0,0,0.08)",
+      }}
+    >
+      <div className="absolute inset-0" style={{ background: theme.mist }} />
+
+      <div className="relative h-[21rem]">
+        {mobileSparkMap[variant].map((spark, index) => (
+          <span
+            key={`${variant}-mobile-${index}`}
+            className="absolute rounded-full opacity-80"
+            style={{
+              left: spark.left,
+              top: spark.top,
+              width: spark.size,
+              height: spark.size,
+              background: theme.spark,
+              boxShadow: `0 0 14px ${theme.spark}`,
+            }}
+          />
+        ))}
+
+        <div
+          className="absolute left-1/2 top-[54%] h-[46%] w-[34%] -translate-x-1/2 -translate-y-1/2 rounded-t-[999px] rounded-b-[2rem]"
+          style={{
+            border: `1px solid ${theme.border}`,
+            boxShadow: theme.glow,
+          }}
+        />
+        <div
+          className="absolute left-1/2 top-[54%] h-[33%] w-[24%] -translate-x-1/2 -translate-y-1/2 rounded-t-[999px] rounded-b-[1.5rem]"
+          style={{
+            background: theme.core,
+            boxShadow: "inset 0 0 22px rgba(255,255,255,0.05)",
+          }}
+        />
+
+        <div className="absolute inset-x-0 bottom-0 p-6">
+          <h3 className="text-3xl font-semibold text-white">{title}</h3>
+          <p className="mt-3 text-sm text-white/84">{hoverText} →</p>
+        </div>
+      </div>
+    </Link>
+  );
+}
 
 export default async function HomePage({
   params,
@@ -25,357 +159,201 @@ export default async function HomePage({
   const copy =
     currentLocale === "pt"
       ? {
-          heroEyebrow: "Associação juvenil · Palmela",
-          heroTitle: "Pó de Ser",
           heroSubtitle:
-            "Arte, bem-estar e mobilidade internacional com sentido humano.",
-          heroIntro:
-            "Criamos experiências onde jovens podem explorar criatividade, ligação humana, natureza, emoções e aprendizagem internacional de forma viva e significativa.",
-
-          introTitle: "Pequena introdução",
-          introText:
-            "Fundada em 2022 e profundamente ligada ao Erasmus+, a Pó de Ser desenvolve projetos locais e internacionais para jovens, unindo arte, cuidado humano, participação e novas perspetivas.",
-
-          identityTitle: "Um pequeno retrato",
-          identityText:
-            "A Pó de Ser cruza arte, bem-estar, mobilidade internacional, natureza, sustentabilidade e consciência emocional em experiências desenhadas para aproximar pessoas e abrir caminhos de descoberta, criação e encontro.",
-
-          areasEyebrow: "Áreas que atravessam o nosso trabalho",
-          areasTitle: "O que habita os nossos projetos",
-          areas: [
-            {
-              title: "Arte e Criatividade",
-              text: "Expressão artística como espaço de descoberta, comunicação e criação coletiva.",
-            },
-            {
-              title: "Bem-estar e Emoções",
-              text: "Processos que valorizam presença, escuta, autoconsciência e cuidado humano.",
-            },
-            {
-              title: "Mobilidade Internacional",
-              text: "Experiências interculturais que ligam jovens, territórios e novas formas de aprender.",
-            },
-            {
-              title: "Natureza e Sustentabilidade",
-              text: "Contacto com o ambiente e atenção a formas mais equilibradas de viver em comunidade.",
-            },
+            "Arte, bem-estar e mobilidade internacional com um ritmo humano.",
+          dustLines: [
+            { normal: "Este Pó não é", accent: "um pó qualquer." },
+            { normal: "Vem de", accent: "ti." },
+            { normal: "De uma partícula nasce", accent: "uma nova forma de Ser." },
           ],
-
-          erasmusEyebrow: "Erasmus+",
-          erasmusTitle: "Um ponto de partida essencial",
-          erasmusText1:
-            "A história da Pó de Ser está profundamente ligada ao Erasmus+. Foi neste universo que encontrámos oportunidades de aprendizagem, encontro e transformação que inspiraram a criação da associação.",
-          erasmusText2:
-            "Hoje, o Erasmus+ continua a ser um foco central do nosso trabalho, não apenas como programa de mobilidade, mas como espaço de educação não-formal, participação juvenil, interculturalidade e crescimento humano.",
-
-          exploreEyebrow: "Explorar",
-          exploreTitle: "Três portas de entrada",
-          exploreCards: [
-            {
-              title: "Sobre",
-              text: "Conhece melhor a identidade, a história e os pilares que atravessam a Pó de Ser.",
-              href: `/${currentLocale}/about`,
-              label: "Entrar",
-            },
-            {
-              title: "Projetos",
-              text: "Descobre os processos, experiências e iniciativas que temos vindo a criar.",
-              href: `/${currentLocale}/projects`,
-              label: "Ver projetos",
-            },
-            {
-              title: "Oportunidades",
-              text: "Consulta candidaturas abertas, intercâmbios, formações e outras possibilidades.",
-              href: `/${currentLocale}/opportunities`,
-              label: "Ver oportunidades",
-            },
-          ],
-
-          impactEyebrow: "Impacto",
-          impact: [
-            { value: "Palmela", label: "Base local" },
-            { value: "2022", label: "Ano de criação" },
-            { value: "Erasmus+", label: "Foco central" },
-            { value: "Arte · Bem-estar · Mobilidade", label: "Universo de trabalho" },
-          ],
+          aboutTitle: "Sobre",
+          aboutHover: "Conhecer melhor a associação",
+          projectsTitle: "Projetos",
+          projectsHover: "Descobrir o que temos vindo a criar",
+          opportunitiesTitle: "Oportunidades",
+          opportunitiesHover: "Ver candidaturas e próximas experiências",
         }
       : {
-          heroEyebrow: "Youth association · Palmela",
-          heroTitle: "Pó de Ser",
           heroSubtitle:
-            "Art, well-being, and international mobility with human meaning.",
-          heroIntro:
-            "We create experiences where young people can explore creativity, human connection, nature, emotions, and international learning in a meaningful and alive way.",
-
-          introTitle: "A small introduction",
-          introText:
-            "Founded in 2022 and deeply connected to Erasmus+, Pó de Ser develops local and international projects for young people, bringing together art, human care, participation, and new perspectives.",
-
-          identityTitle: "A small portrait",
-          identityText:
-            "Pó de Ser brings together art, well-being, international mobility, nature, sustainability, and emotional awareness in experiences designed to connect people and open paths of discovery, creation, and encounter.",
-
-          areasEyebrow: "Areas that shape our work",
-          areasTitle: "What lives inside our projects",
-          areas: [
+            "Art, well-being, and international mobility with a human rhythm.",
+          dustLines: [
+            { normal: "This Dust is not", accent: "just any dust." },
+            { normal: "It comes from", accent: "you." },
             {
-              title: "Art and Creativity",
-              text: "Artistic expression as a space for discovery, communication, and collective creation.",
-            },
-            {
-              title: "Well-being and Emotions",
-              text: "Processes that value presence, listening, self-awareness, and human care.",
-            },
-            {
-              title: "International Mobility",
-              text: "Intercultural experiences that connect young people, territories, and new ways of learning.",
-            },
-            {
-              title: "Nature and Sustainability",
-              text: "Contact with the environment and attention to more balanced ways of living in community.",
+              normal: "From a particle, there emerges",
+              accent: "a new way of Being.",
             },
           ],
-
-          erasmusEyebrow: "Erasmus+",
-          erasmusTitle: "An essential starting point",
-          erasmusText1:
-            "Pó de Ser’s story is deeply connected to Erasmus+. It was through this universe that we found learning, encounter, and transformation opportunities that inspired the creation of the association.",
-          erasmusText2:
-            "Today, Erasmus+ remains a central focus of our work, not only as a mobility programme, but as a space for non-formal education, youth participation, interculturality, and human growth.",
-
-          exploreEyebrow: "Explore",
-          exploreTitle: "Three entry points",
-          exploreCards: [
-            {
-              title: "About",
-              text: "Get to know the identity, story, and pillars that shape Pó de Ser.",
-              href: `/${currentLocale}/about`,
-              label: "Enter",
-            },
-            {
-              title: "Projects",
-              text: "Discover the processes, experiences, and initiatives we have been creating.",
-              href: `/${currentLocale}/projects`,
-              label: "See projects",
-            },
-            {
-              title: "Opportunities",
-              text: "Check open calls, exchanges, training courses, and other possibilities.",
-              href: `/${currentLocale}/opportunities`,
-              label: "See opportunities",
-            },
-          ],
-
-          impactEyebrow: "Impact",
-          impact: [
-            { value: "Palmela", label: "Local base" },
-            { value: "2022", label: "Founded" },
-            { value: "Erasmus+", label: "Main focus" },
-            { value: "Art · Well-being · Mobility", label: "Working universe" },
-          ],
+          aboutTitle: "About",
+          aboutHover: "Get to know the association better",
+          projectsTitle: "Projects",
+          projectsHover: "Discover what we have been creating",
+          opportunitiesTitle: "Opportunities",
+          opportunitiesHover: "See open calls and upcoming experiences",
         };
 
   return (
     <>
       <Navbar locale={currentLocale} />
 
-      <main>
-        <section className="relative overflow-hidden text-white">
+      <main className="bg-[var(--cream)]">
+        <section className="relative min-h-[calc(100svh-72px)] overflow-hidden text-white">
           <HeroDustBackground />
 
-          <div className="relative z-10 mx-auto flex min-h-[72vh] max-w-6xl items-center px-6 py-18 md:min-h-[78vh] md:py-24">
-            <div className="grid w-full gap-10 lg:grid-cols-[1fr_340px] lg:items-end">
-              <ScrollReveal className="max-w-4xl" y={28}>
-                <p className="mb-4 text-sm uppercase tracking-[0.22em] text-white/80">
-                  {copy.heroEyebrow}
-                </p>
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,12,15,0.14),rgba(15,12,15,0.05)_26%,rgba(15,12,15,0.07)_70%,rgba(247,241,232,0.02)_100%)]" />
+          <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-b from-transparent via-[rgba(247,241,232,0.08)] to-[var(--cream)]" />
 
-                <h1 className="max-w-4xl text-5xl leading-[1.02] font-semibold text-white md:text-7xl">
-                  {copy.heroTitle}
-                </h1>
-
-                <p className="mt-6 max-w-3xl text-2xl leading-tight text-white/88 md:text-3xl">
-                  {copy.heroSubtitle}
-                </p>
-
-                <p className="mt-6 max-w-2xl text-lg leading-8 text-white/78">
-                  {copy.heroIntro}
-                </p>
-              </ScrollReveal>
-
-              <ScrollReveal delay={0.1}>
-                <div className="rounded-[2rem] bg-white/10 p-6 shadow-sm ring-1 ring-white/15 backdrop-blur-md">
-                  <p className="text-sm uppercase tracking-[0.22em] text-white/76">
-                    {copy.introTitle}
-                  </p>
-                  <p className="mt-4 leading-7 text-white/86">{copy.introText}</p>
-
-                  <div className="mt-5 flex flex-wrap gap-2 text-xs uppercase tracking-[0.14em] text-white/72">
-                    <span className="rounded-full border border-white/20 px-3 py-1">
-                      Palmela
-                    </span>
-                    <span className="rounded-full border border-white/20 px-3 py-1">
-                      Erasmus+
-                    </span>
-                    <span className="rounded-full border border-white/20 px-3 py-1">
-                      Art
-                    </span>
-                    <span className="rounded-full border border-white/20 px-3 py-1">
-                      Well-being
-                    </span>
-                  </div>
-                </div>
-              </ScrollReveal>
-            </div>
-          </div>
-        </section>
-
-        <section className="bg-white">
-          <div className="mx-auto max-w-6xl px-6 py-20">
-            <div className="grid gap-10 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-16 lg:items-center">
-              <ScrollReveal className="flex items-center justify-start">
-                <div className="relative aspect-square w-[150px] sm:w-[170px] lg:w-[190px]">
+          <div className="relative z-10 mx-auto flex min-h-[calc(100svh-72px)] max-w-6xl items-center justify-center px-6">
+            <ScrollReveal className="max-w-4xl text-center" y={22}>
+              <div className="mx-auto w-full max-w-[22rem] md:max-w-[26rem]">
+                <div className="relative mx-auto aspect-[1.2/1] w-full">
                   <Image
-                    src="/branding/head-png.png"
-                    alt="Pó de Ser logo"
+                    src="/branding/logo-better.png"
+                    alt="Pó de Ser"
                     fill
-                    sizes="190px"
+                    priority
                     className="object-contain"
                   />
                 </div>
-              </ScrollReveal>
+              </div>
 
-              <ScrollReveal delay={0.06}>
-                <p className="text-sm uppercase tracking-[0.22em] text-[var(--brand)]">
-                  {copy.identityTitle}
-                </p>
-                <p className="mt-6 text-lg leading-8 text-[var(--muted)]">
-                  {copy.identityText}
-                </p>
-              </ScrollReveal>
-            </div>
+              <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-white/88 md:text-[2rem] md:leading-[1.25]">
+                {copy.heroSubtitle}
+              </p>
+            </ScrollReveal>
           </div>
         </section>
 
         <section className="bg-[var(--cream)]">
-          <div className="mx-auto max-w-6xl px-6 py-20">
-            <ScrollReveal className="max-w-3xl">
-              <p className="text-sm uppercase tracking-[0.22em] text-[var(--brand)]">
-                {copy.areasEyebrow}
-              </p>
-              <h2 className="mt-3 text-3xl font-semibold text-[var(--ink)] md:text-4xl">
-                {copy.areasTitle}
-              </h2>
-            </ScrollReveal>
-
-            <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-              {copy.areas.map((area, index) => (
-                <ScrollReveal key={area.title} delay={index * 0.06}>
-                  <article className="rounded-[1.5rem] bg-white p-6 ring-1 ring-black/5">
-                    <h3 className="text-xl font-semibold text-[var(--ink)]">
-                      {area.title}
-                    </h3>
-                    <p className="mt-3 leading-7 text-[var(--muted)]">
-                      {area.text}
-                    </p>
-                  </article>
-                </ScrollReveal>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="bg-white">
-          <div className="mx-auto max-w-6xl px-6 py-20">
-            <div className="grid gap-10 lg:grid-cols-[0.42fr_0.58fr] lg:items-start">
-              <ScrollReveal>
-                <div className="overflow-hidden rounded-[2rem] shadow-sm ring-1 ring-black/5">
-                  <ParallaxImage
-                    src="/about/about-erasmus.jpg"
-                    alt="Pó de Ser and Erasmus+"
-                    sizes="(max-width: 1024px) 100vw, 40vw"
-                    wrapperClassName="aspect-[4/3]"
-                    imageClassName="object-cover"
-                    offset={20}
-                  />
-                </div>
-              </ScrollReveal>
-
-              <ScrollReveal delay={0.06}>
-                <p className="text-sm uppercase tracking-[0.22em] text-[var(--brand)]">
-                  {copy.erasmusEyebrow}
-                </p>
-                <h2 className="mt-3 text-3xl font-semibold text-[var(--ink)] md:text-4xl">
-                  {copy.erasmusTitle}
-                </h2>
-
-                <p className="mt-6 text-lg leading-8 text-[var(--muted)]">
-                  {copy.erasmusText1}
-                </p>
-
-                <p className="mt-5 text-lg leading-8 text-[var(--muted)]">
-                  {copy.erasmusText2}
-                </p>
-              </ScrollReveal>
-            </div>
-          </div>
-        </section>
-
-        <section className="bg-[var(--soft)]">
-          <div className="mx-auto max-w-6xl px-6 py-20">
-            <ScrollReveal className="max-w-3xl">
-              <p className="text-sm uppercase tracking-[0.22em] text-[var(--brand)]">
-                {copy.exploreEyebrow}
-              </p>
-              <h2 className="mt-3 text-3xl font-semibold text-[var(--ink)] md:text-4xl">
-                {copy.exploreTitle}
-              </h2>
-            </ScrollReveal>
-
-            <div className="mt-10 grid gap-6 md:grid-cols-3">
-              {copy.exploreCards.map((card, index) => (
-                <ScrollReveal key={card.title} delay={index * 0.08}>
-                  <Link
-                    href={card.href}
-                    className="group block rounded-[1.75rem] bg-white p-6 shadow-sm ring-1 ring-black/5 transition-transform duration-300 hover:-translate-y-1"
+          <div className="mx-auto max-w-6xl px-6 py-16 md:py-20">
+            <ScrollReveal className="mx-auto max-w-6xl text-center">
+              <div className="space-y-3 md:space-y-4">
+                {copy.dustLines.map((line, index) => (
+                  <p
+                    key={index}
+                    className="text-[clamp(2.5rem,6.6vw,6rem)] leading-[0.95] tracking-[-0.04em] text-[var(--ink)]"
                   >
-                    <h3 className="text-2xl font-semibold text-[var(--ink)]">
-                      {card.title}
-                    </h3>
-                    <p className="mt-4 leading-7 text-[var(--muted)]">
-                      {card.text}
-                    </p>
-                    <p className="mt-6 text-sm font-medium text-[var(--brand)] transition group-hover:translate-x-1">
-                      {card.label} →
-                    </p>
-                  </Link>
-                </ScrollReveal>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="bg-[var(--ink)] text-white">
-          <div className="mx-auto max-w-6xl px-6 py-16">
-            <ScrollReveal>
-              <p className="text-sm uppercase tracking-[0.22em] text-white/72">
-                {copy.impactEyebrow}
-              </p>
+                    <span>{line.normal} </span>
+                    <span className="font-serif italic text-[rgba(155,55,53,0.50)]">
+                      {line.accent}
+                    </span>
+                  </p>
+                ))}
+              </div>
             </ScrollReveal>
-
-            <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-              {copy.impact.map((item, index) => (
-                <ScrollReveal key={item.label} delay={index * 0.05}>
-                  <div className="rounded-[1.5rem] bg-white/6 p-6 ring-1 ring-white/10 backdrop-blur-sm">
-                    <p className="text-2xl font-semibold text-white">{item.value}</p>
-                    <p className="mt-2 text-sm leading-6 text-white/72">{item.label}</p>
-                  </div>
-                </ScrollReveal>
-              ))}
-            </div>
           </div>
         </section>
 
+        <section className="relative">
+<div className="mx-auto grid max-w-6xl gap-5 px-6 py-12 md:hidden">
+  <ScrollReveal>
+    <HomeMobilePortalCard
+      href={`/${currentLocale}/about`}
+      title={copy.aboutTitle}
+      hoverText={copy.aboutHover}
+      variant="about"
+    />
+  </ScrollReveal>
+
+  <ScrollReveal delay={0.05}>
+    <HomeMobilePortalCard
+      href={`/${currentLocale}/projects`}
+      title={copy.projectsTitle}
+      hoverText={copy.projectsHover}
+      variant="projects"
+    />
+  </ScrollReveal>
+
+  <ScrollReveal delay={0.1}>
+    <HomeMobilePortalCard
+      href={`/${currentLocale}/opportunities`}
+      title={copy.opportunitiesTitle}
+      hoverText={copy.opportunitiesHover}
+      variant="opportunities"
+    />
+  </ScrollReveal>
+</div>
+
+          <div className="relative hidden h-[44rem] w-full overflow-hidden md:block">
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(180deg, #221a24 0%, #2a2630 44%, #26303a 100%)",
+              }}
+            />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "radial-gradient(circle at 18% 34%, rgba(155,55,53,0.16), transparent 24%), radial-gradient(circle at 80% 26%, rgba(170,214,206,0.14), transparent 22%), radial-gradient(circle at 50% 70%, rgba(210,150,159,0.08), transparent 20%)",
+              }}
+            />
+
+            <div className="absolute left-[4%] top-[10%] h-[72%] w-[28%]">
+              <HomePortalNode
+                href={`/${currentLocale}/about`}
+                title={copy.aboutTitle}
+                hoverText={copy.aboutHover}
+                variant="about"
+                align="left"
+              />
+            </div>
+
+            <div className="absolute left-1/2 top-[4%] h-[86%] w-[28%] -translate-x-1/2">
+              <HomePortalNode
+                href={`/${currentLocale}/projects`}
+                title={copy.projectsTitle}
+                hoverText={copy.projectsHover}
+                variant="projects"
+                align="center"
+                tall
+              />
+            </div>
+
+            <div className="absolute right-[4%] top-[10%] h-[72%] w-[28%]">
+              <HomePortalNode
+                href={`/${currentLocale}/opportunities`}
+                title={copy.opportunitiesTitle}
+                hoverText={copy.opportunitiesHover}
+                variant="opportunities"
+                align="right"
+              />
+            </div>
+
+            <svg
+              viewBox="0 0 1200 700"
+              className="pointer-events-none absolute inset-0 h-full w-full"
+              preserveAspectRatio="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M 600 0 C 520 110 420 210 310 300"
+                fill="none"
+                stroke="rgba(255,255,255,0.11)"
+                strokeWidth="1.4"
+              />
+              <path
+                d="M 600 0 C 680 110 780 210 890 300"
+                fill="none"
+                stroke="rgba(255,255,255,0.11)"
+                strokeWidth="1.4"
+              />
+              <path
+                d="M 310 300 C 392 408 432 540 470 700"
+                fill="none"
+                stroke="rgba(255,255,255,0.09)"
+                strokeWidth="1.4"
+              />
+              <path
+                d="M 890 300 C 808 408 768 540 730 700"
+                fill="none"
+                stroke="rgba(255,255,255,0.09)"
+                strokeWidth="1.4"
+              />
+            </svg>
+          </div>
+        </section>
       </main>
 
       <Footer locale={currentLocale} />

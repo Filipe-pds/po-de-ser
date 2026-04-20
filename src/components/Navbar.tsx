@@ -36,10 +36,14 @@ export default function Navbar({ locale }: NavbarProps) {
 
   const labels = dictionary[locale].navbar;
   const otherLocale: Locale = locale === "pt" ? "en" : "pt";
+  const tagline =
+    locale === "pt"
+      ? "Arte • Bem-estar • Mobilidade"
+      : "Art • Well-being • Mobility";
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
+    stiffness: 105,
     damping: 30,
     mass: 0.2,
   });
@@ -49,7 +53,7 @@ export default function Navbar({ locale }: NavbarProps) {
   }, [pathname, otherLocale, locale]);
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 16);
+    const handleScroll = () => setIsScrolled(window.scrollY > 12);
     handleScroll();
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -72,50 +76,56 @@ export default function Navbar({ locale }: NavbarProps) {
   const navLinks = [
     { href: `/${locale}/about`, label: labels.about },
     { href: `/${locale}/projects`, label: labels.projects },
-    { href: `/${locale}/opportunities`, label: labels.opportunities || "Opportunities" },
+    {
+      href: `/${locale}/opportunities`,
+      label: labels.opportunities || "Opportunities",
+    },
     { href: `/${locale}#contact`, label: labels.contact },
   ];
 
   return (
     <>
       <MotionDiv
-        className="fixed top-0 left-0 right-0 z-[90] h-[3px] origin-left bg-[var(--brand)]"
+        className="fixed left-0 right-0 top-0 z-[90] h-[3px] origin-left bg-[var(--brand)]"
         style={{ scaleX }}
       />
 
       <header
-        className={`fixed top-0 left-0 right-0 z-[70] transition-all duration-300 ${
+        className={`fixed left-0 right-0 top-0 z-[70] transition-all duration-300 ${
           isScrolled || isMobileMenuOpen
             ? "border-b border-black/5 bg-[var(--cream)]/92 shadow-sm backdrop-blur-xl"
-            : "bg-[var(--cream)]/76 backdrop-blur-md"
+            : "bg-[var(--cream)]/80 backdrop-blur-md"
         }`}
       >
-        <div className="mx-auto flex h-[92px] max-w-6xl items-center justify-between px-6">
-          <Link href={`/${locale}`} className="z-[80] flex min-w-0 items-center gap-3">
+        <div className="mx-auto flex h-[72px] max-w-6xl items-center justify-between px-6">
+          <Link
+            href={`/${locale}`}
+            className="z-[80] flex min-w-0 items-center gap-3"
+          >
             <Image
               src="/branding/head-png.png"
               alt="Pó de Ser"
-              width={60}
-              height={60}
+              width={52}
+              height={52}
               priority
-              className="h-14 w-auto shrink-0 object-contain"
+              className="h-10 w-auto shrink-0 object-contain"
             />
             <div className="min-w-0">
-              <p className="truncate text-3xl font-medium tracking-[0.24em] text-[var(--brand)]">
+              <p className="truncate text-[1.55rem] font-medium tracking-[0.2em] text-[var(--brand)]">
                 PÓ DE SER
               </p>
-              <p className="truncate text-sm text-[var(--muted)]">
-                {labels.tagline}
+              <p className="truncate text-[0.76rem] text-[var(--muted)]">
+                {tagline}
               </p>
             </div>
           </Link>
 
-          <div className="hidden items-center gap-10 md:flex">
+          <div className="hidden items-center gap-7 md:flex">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-lg text-[var(--ink)] transition-colors hover:text-[var(--brand)]"
+                className="text-[1rem] text-[var(--ink)] transition-colors hover:text-[var(--brand)]"
               >
                 {link.label}
               </Link>
@@ -123,7 +133,7 @@ export default function Navbar({ locale }: NavbarProps) {
 
             <Link
               href={localeHref}
-              className="inline-flex h-12 items-center rounded-full border border-[var(--brand)]/60 px-5 text-lg text-[var(--brand)] transition hover:bg-[var(--brand)] hover:text-white"
+              className="inline-flex h-10 items-center rounded-full border border-[var(--brand)]/60 px-5 text-sm text-[var(--brand)] transition hover:bg-[var(--brand)] hover:text-white"
             >
               {otherLocale.toUpperCase()}
             </Link>
@@ -134,7 +144,12 @@ export default function Navbar({ locale }: NavbarProps) {
             className="z-[80] rounded-full border border-black/10 bg-white/70 p-2 text-[var(--ink)] shadow-sm backdrop-blur transition-all hover:bg-white focus:outline-none md:hidden"
             aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
           >
-            <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              className="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               {isMobileMenuOpen ? (
                 <path
                   strokeLinecap="round"
@@ -156,7 +171,7 @@ export default function Navbar({ locale }: NavbarProps) {
 
         {isMobileMenuOpen ? (
           <div className="border-t border-black/5 bg-[var(--cream)] md:hidden">
-            <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-6">
+            <div className="mx-auto flex max-w-6xl flex-col gap-5 px-6 py-5">
               <div className="flex flex-col gap-2">
                 {navLinks.map((link) => (
                   <Link
@@ -170,11 +185,11 @@ export default function Navbar({ locale }: NavbarProps) {
                 ))}
               </div>
 
-              <div className="border-t border-black/5 pt-5">
+              <div className="border-t border-black/5 pt-4">
                 <Link
                   href={localeHref}
                   onClick={closeMenu}
-                  className="inline-flex h-12 items-center rounded-full border border-[var(--brand)]/60 px-5 text-base text-[var(--brand)] transition hover:bg-[var(--brand)] hover:text-white"
+                  className="inline-flex h-10 items-center rounded-full border border-[var(--brand)]/60 px-5 text-sm text-[var(--brand)] transition hover:bg-[var(--brand)] hover:text-white"
                 >
                   {otherLocale.toUpperCase()}
                 </Link>
@@ -184,7 +199,7 @@ export default function Navbar({ locale }: NavbarProps) {
         ) : null}
       </header>
 
-      <div className="h-[92px]" />
+      <div className="h-[72px]" />
     </>
   );
 }

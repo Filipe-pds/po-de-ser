@@ -100,34 +100,35 @@ export default async function AboutPage({
       <Navbar locale={currentLocale} />
 
       <main>
-        <section className="relative min-h-[62vh] overflow-hidden bg-[var(--ink)] text-white md:min-h-[66vh]">
-          <Image
-            src="/about/about-cover.jpg"
-            alt="Pó de Ser team"
-            fill
-            priority
-            sizes="100vw"
-            className="scale-[1.02] object-cover object-[center_25%]"
-          />
+<section className="relative min-h-[calc(100svh-72px)] overflow-hidden bg-[var(--ink)] text-white">
+  <Image
+    src="/about/about-cover.jpg"
+    alt="Pó de Ser team"
+    fill
+    priority
+    sizes="100vw"
+    className="object-cover object-[center_25%]"
+  />
 
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--ink)] via-[var(--ink)]/55 to-[var(--ink)]/20" />
+  <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,12,15,0.18),rgba(15,12,15,0.10)_24%,rgba(15,12,15,0.34)_68%,rgba(15,12,15,0.82)_100%)]" />
+  <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-b from-transparent via-[rgba(247,241,232,0.08)] to-[var(--cream)]" />
 
-          <div className="relative mx-auto flex min-h-[62vh] max-w-6xl items-end px-6 py-14 md:min-h-[66vh] md:py-18">
-            <ScrollReveal className="max-w-3xl" y={24}>
-              <p className="mb-4 text-sm uppercase tracking-[0.22em] text-white/80">
-                {copy.heroEyebrow}
-              </p>
+  <div className="relative mx-auto flex min-h-[calc(100svh-72px)] max-w-6xl items-end px-6 py-14 md:py-18">
+    <ScrollReveal className="max-w-3xl" y={24}>
+      <p className="mb-4 text-sm uppercase tracking-[0.22em] text-white/80">
+        {copy.heroEyebrow}
+      </p>
 
-              <h1 className="text-5xl leading-[1.02] font-semibold md:text-7xl">
-                {copy.heroTitle}
-              </h1>
+      <h1 className="text-5xl leading-[1.02] font-semibold md:text-7xl">
+        {copy.heroTitle}
+      </h1>
 
-              <p className="mt-6 max-w-3xl text-lg leading-8 text-white/82">
-                {copy.heroIntro}
-              </p>
-            </ScrollReveal>
-          </div>
-        </section>
+      <p className="mt-6 max-w-3xl text-lg leading-8 text-white/82">
+        {copy.heroIntro}
+      </p>
+    </ScrollReveal>
+  </div>
+</section>
 
         <section className="bg-white">
           <div className="mx-auto max-w-6xl px-6 py-20">
