@@ -80,7 +80,7 @@ export default function Navbar({ locale }: NavbarProps) {
       href: `/${locale}/opportunities`,
       label: labels.opportunities || "Opportunities",
     },
-    { href: `/${locale}#contact`, label: labels.contact },
+    { href: `/${locale}/contact`, label: labels.contact },
   ];
 
   return (

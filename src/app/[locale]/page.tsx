@@ -1,147 +1,12 @@
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import ScrollReveal from "@/components/ScrollReveal";
 import HeroDustBackground from "@/components/HeroDustBackground";
 import HomePortalNode from "@/components/HomePortalNode";
-import { locales, type Locale } from "@/lib/content";
 import HomeMobilePortalCard from "@/components/HomeMobilePortalCard";
-
-type PortalVariant = "about" | "projects" | "opportunities";
-
-const mobilePortalTheme: Record<
-  PortalVariant,
-  {
-    border: string;
-    glow: string;
-    core: string;
-    mist: string;
-    spark: string;
-  }
-> = {
-  about: {
-    border: "rgba(245,229,202,0.72)",
-    glow:
-      "0 0 0 1px rgba(245,229,202,0.18), 0 0 22px rgba(245,229,202,0.16), inset 0 0 14px rgba(255,255,255,0.04)",
-    core:
-      "radial-gradient(circle at 50% 35%, rgba(245,229,202,0.12), rgba(37,30,34,0.86) 55%, rgba(15,12,15,1) 100%)",
-    mist:
-      "radial-gradient(circle at 50% 46%, rgba(245,229,202,0.08), transparent 52%)",
-    spark: "rgba(245,229,202,0.76)",
-  },
-  projects: {
-    border: "rgba(210,150,159,0.78)",
-    glow:
-      "0 0 0 1px rgba(210,150,159,0.20), 0 0 26px rgba(210,150,159,0.24), 0 0 48px rgba(121,166,160,0.10), inset 0 0 16px rgba(255,255,255,0.05)",
-    core:
-      "radial-gradient(circle at 50% 35%, rgba(210,150,159,0.16), rgba(38,24,38,0.86) 55%, rgba(12,10,16,1) 100%)",
-    mist:
-      "radial-gradient(circle at 50% 48%, rgba(255,255,255,0.04), transparent 56%)",
-    spark: "rgba(224,188,132,0.82)",
-  },
-  opportunities: {
-    border: "rgba(170,214,206,0.78)",
-    glow:
-      "0 0 0 1px rgba(170,214,206,0.20), 0 0 24px rgba(170,214,206,0.22), inset 0 0 16px rgba(255,255,255,0.05)",
-    core:
-      "radial-gradient(circle at 50% 35%, rgba(170,214,206,0.16), rgba(23,30,38,0.84) 55%, rgba(9,12,18,1) 100%)",
-    mist:
-      "radial-gradient(circle at 50% 46%, rgba(121,166,160,0.10), transparent 54%)",
-    spark: "rgba(170,214,206,0.84)",
-  },
-};
-
-const mobileSparkMap: Record<
-  PortalVariant,
-  { left: string; top: string; size: number }[]
-> = {
-  about: [
-    { left: "18%", top: "24%", size: 5 },
-    { left: "34%", top: "58%", size: 6 },
-    { left: "20%", top: "78%", size: 7 },
-  ],
-  projects: [
-    { left: "46%", top: "18%", size: 5 },
-    { left: "58%", top: "56%", size: 6 },
-    { left: "42%", top: "82%", size: 5 },
-  ],
-  opportunities: [
-    { left: "72%", top: "26%", size: 5 },
-    { left: "64%", top: "56%", size: 6 },
-    { left: "56%", top: "80%", size: 7 },
-  ],
-};
-
-function MobilePortalCard({
-  href,
-  title,
-  hoverText,
-  variant,
-}: {
-  href: string;
-  title: string;
-  hoverText: string;
-  variant: PortalVariant;
-}) {
-  const theme = mobilePortalTheme[variant];
-
-  return (
-    <Link
-      href={href}
-      className="group relative block overflow-hidden rounded-[2rem] border border-black/8 md:hidden"
-      style={{
-        background:
-          variant === "about"
-            ? "linear-gradient(180deg, #33272d 0%, #211b20 100%)"
-            : variant === "projects"
-              ? "linear-gradient(180deg, #2d2330 0%, #17131a 100%)"
-              : "linear-gradient(180deg, #2b313b 0%, #171d24 100%)",
-        boxShadow: "0 10px 28px rgba(0,0,0,0.08)",
-      }}
-    >
-      <div className="absolute inset-0" style={{ background: theme.mist }} />
-
-      <div className="relative h-[21rem]">
-        {mobileSparkMap[variant].map((spark, index) => (
-          <span
-            key={`${variant}-mobile-${index}`}
-            className="absolute rounded-full opacity-80"
-            style={{
-              left: spark.left,
-              top: spark.top,
-              width: spark.size,
-              height: spark.size,
-              background: theme.spark,
-              boxShadow: `0 0 14px ${theme.spark}`,
-            }}
-          />
-        ))}
-
-        <div
-          className="absolute left-1/2 top-[54%] h-[46%] w-[34%] -translate-x-1/2 -translate-y-1/2 rounded-t-[999px] rounded-b-[2rem]"
-          style={{
-            border: `1px solid ${theme.border}`,
-            boxShadow: theme.glow,
-          }}
-        />
-        <div
-          className="absolute left-1/2 top-[54%] h-[33%] w-[24%] -translate-x-1/2 -translate-y-1/2 rounded-t-[999px] rounded-b-[1.5rem]"
-          style={{
-            background: theme.core,
-            boxShadow: "inset 0 0 22px rgba(255,255,255,0.05)",
-          }}
-        />
-
-        <div className="absolute inset-x-0 bottom-0 p-6">
-          <h3 className="text-3xl font-semibold text-white">{title}</h3>
-          <p className="mt-3 text-sm text-white/84">{hoverText} →</p>
-        </div>
-      </div>
-    </Link>
-  );
-}
+import { locales, type Locale } from "@/lib/content";
 
 export default async function HomePage({
   params,
@@ -212,6 +77,7 @@ export default async function HomePage({
                     alt="Pó de Ser"
                     fill
                     priority
+                    sizes="(max-width: 768px) 22rem, 26rem"
                     className="object-contain"
                   />
                 </div>
@@ -245,36 +111,39 @@ export default async function HomePage({
         </section>
 
         <section className="relative">
-<div className="mx-auto grid max-w-6xl gap-5 px-6 py-12 md:hidden">
-  <ScrollReveal>
-    <HomeMobilePortalCard
-      href={`/${currentLocale}/about`}
-      title={copy.aboutTitle}
-      hoverText={copy.aboutHover}
-      variant="about"
-    />
-  </ScrollReveal>
+          <div className="mx-auto grid max-w-6xl gap-5 px-6 py-12 md:hidden">
+            <ScrollReveal>
+              <HomeMobilePortalCard
+                href={`/${currentLocale}/about`}
+                title={copy.aboutTitle}
+                hoverText={copy.aboutHover}
+                variant="about"
+              />
+            </ScrollReveal>
 
-  <ScrollReveal delay={0.05}>
-    <HomeMobilePortalCard
-      href={`/${currentLocale}/projects`}
-      title={copy.projectsTitle}
-      hoverText={copy.projectsHover}
-      variant="projects"
-    />
-  </ScrollReveal>
+            <ScrollReveal delay={0.05}>
+              <HomeMobilePortalCard
+                href={`/${currentLocale}/projects`}
+                title={copy.projectsTitle}
+                hoverText={copy.projectsHover}
+                variant="projects"
+              />
+            </ScrollReveal>
 
-  <ScrollReveal delay={0.1}>
-    <HomeMobilePortalCard
-      href={`/${currentLocale}/opportunities`}
-      title={copy.opportunitiesTitle}
-      hoverText={copy.opportunitiesHover}
-      variant="opportunities"
-    />
-  </ScrollReveal>
-</div>
+            <ScrollReveal delay={0.1}>
+              <HomeMobilePortalCard
+                href={`/${currentLocale}/opportunities`}
+                title={copy.opportunitiesTitle}
+                hoverText={copy.opportunitiesHover}
+                variant="opportunities"
+              />
+            </ScrollReveal>
+          </div>
 
-          <div className="relative hidden h-[44rem] w-full overflow-hidden md:block">
+          <div className="pointer-events-none absolute inset-x-0 top-0 z-10 hidden h-32 bg-gradient-to-b from-[var(--cream)] via-[rgba(247,241,232,0.72)] to-transparent md:block" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 hidden h-36 bg-gradient-to-b from-transparent via-[rgba(34,26,36,0.16)] to-[var(--cream)] md:block" />
+
+          <div className="relative hidden h-[46rem] w-full overflow-hidden md:block">
             <div
               className="absolute inset-0"
               style={{
@@ -328,28 +197,46 @@ export default async function HomePage({
               aria-hidden="true"
             >
               <path
-                d="M 600 0 C 520 110 420 210 310 300"
+                d="M 600 -10 C 560 84 468 178 334 286"
                 fill="none"
-                stroke="rgba(255,255,255,0.11)"
-                strokeWidth="1.4"
+                stroke="rgba(245,229,202,0.14)"
+                strokeWidth="1.5"
+                strokeLinecap="round"
               />
               <path
-                d="M 600 0 C 680 110 780 210 890 300"
+                d="M 600 -10 C 640 84 732 178 866 286"
                 fill="none"
-                stroke="rgba(255,255,255,0.11)"
-                strokeWidth="1.4"
+                stroke="rgba(245,229,202,0.14)"
+                strokeWidth="1.5"
+                strokeLinecap="round"
               />
               <path
-                d="M 310 300 C 392 408 432 540 470 700"
+                d="M 600 54 C 546 142 476 218 362 320"
                 fill="none"
-                stroke="rgba(255,255,255,0.09)"
-                strokeWidth="1.4"
+                stroke="rgba(182,64,52,0.10)"
+                strokeWidth="1.1"
+                strokeLinecap="round"
               />
               <path
-                d="M 890 300 C 808 408 768 540 730 700"
+                d="M 600 54 C 654 142 724 218 838 320"
                 fill="none"
-                stroke="rgba(255,255,255,0.09)"
+                stroke="rgba(121,166,160,0.10)"
+                strokeWidth="1.1"
+                strokeLinecap="round"
+              />
+              <path
+                d="M 334 286 C 404 376 438 508 474 700"
+                fill="none"
+                stroke="rgba(245,229,202,0.11)"
                 strokeWidth="1.4"
+                strokeLinecap="round"
+              />
+              <path
+                d="M 866 286 C 796 376 762 508 726 700"
+                fill="none"
+                stroke="rgba(245,229,202,0.11)"
+                strokeWidth="1.4"
+                strokeLinecap="round"
               />
             </svg>
           </div>
