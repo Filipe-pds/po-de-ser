@@ -2,11 +2,10 @@
 
 import {
   motion,
-  useMotionValue,
   useTransform,
   type MotionValue,
+  type Variants,
 } from "framer-motion";
-import { useEffect } from "react";
 
 type PortalVariant = "about" | "projects" | "opportunities";
 
@@ -47,53 +46,365 @@ const palettes: Record<
   },
 };
 
+const containerVariants: Variants = {
+  closed: {
+    opacity: 0.42,
+  },
+  open: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.04,
+    },
+  },
+};
+
+const vineVariants: Variants = {
+  closed: {
+    pathLength: 0,
+    opacity: 0,
+  },
+  open: {
+    pathLength: 1,
+    opacity: 1,
+    transition: {
+      duration: 0.8,
+      ease: "easeOut",
+    },
+  },
+};
+
+const leafVariants: Variants = {
+  closed: {
+    scale: 0.45,
+    opacity: 0,
+    rotate: -8,
+  },
+  open: {
+    scale: 1,
+    opacity: 1,
+    rotate: 0,
+    transition: {
+      duration: 0.38,
+      ease: "easeOut",
+    },
+  },
+};
+
 export default function PortalGrowth({
   variant,
   progress,
-  active,
+  active = false,
   tall = false,
   mobile = false,
 }: PortalGrowthProps) {
   const palette = palettes[variant];
-
-  const fallbackProgress = useMotionValue(active ? 1 : 0);
-  useEffect(() => {
-    if (!progress) {
-      fallbackProgress.set(active ? 1 : 0);
-    }
-  }, [active, progress, fallbackProgress]);
-
-  const sourceProgress = progress ?? fallbackProgress;
-
-  const centerStrength = useTransform(
-    sourceProgress,
-    [0, 0.18, 0.5, 0.82, 1],
-    [0.08, 0.55, 1, 0.55, 0.08]
-  );
-
-  const centerOpacity = useTransform(
-    sourceProgress,
-    [0, 0.2, 0.5, 0.8, 1],
-    [0, 0.42, 1, 0.42, 0]
-  );
-
-  const vinePrimary = useTransform(centerStrength, [0, 1], [0.12, 1]);
-  const vineSecondary = useTransform(centerStrength, [0, 1], [0.08, 0.9]);
-  const vineBranch = useTransform(centerStrength, [0, 1], [0.02, 0.82]);
-
-  const vineOpacityPrimary = useTransform(centerOpacity, [0, 1], [0, 1]);
-  const vineOpacitySecondary = useTransform(centerOpacity, [0, 1], [0, 0.94]);
-  const vineOpacityBranch = useTransform(centerOpacity, [0, 1], [0, 0.84]);
-
-  const leafScale = useTransform(centerStrength, [0, 1], [0.35, 1]);
-  const leafOpacity = useTransform(centerOpacity, [0, 1], [0, 1]);
-  const leafRotateLeft = useTransform(centerStrength, [0, 1], [-16, 0]);
-  const leafRotateRight = useTransform(centerStrength, [0, 1], [16, 0]);
-
-  const floatY = useTransform(centerStrength, [0, 1], [0, -1]);
-  const rootOpacity = useTransform(centerOpacity, [0, 1], [0.18, 1]);
+  const isScrollMode = Boolean(progress);
 
   const filterId = `glow-${variant}-${mobile ? "mobile" : "desktop"}-${tall ? "tall" : "base"}`;
+
+  if (!isScrollMode) {
+    return (
+      <motion.div
+        className="pointer-events-none absolute inset-0 overflow-visible"
+        variants={containerVariants}
+        animate={active ? "open" : "closed"}
+      >
+        <motion.svg
+          viewBox="0 0 100 100"
+          preserveAspectRatio="none"
+          className="absolute inset-0 h-full w-full overflow-visible"
+          animate={
+            active
+              ? {
+                  y: [0, -1, 0],
+                }
+              : {
+                  y: 0,
+                }
+          }
+          transition={{
+            duration: 4,
+            repeat: active ? Infinity : 0,
+            ease: "easeInOut",
+          }}
+        >
+          <defs>
+            <filter id={filterId} x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="1.3" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+
+          {variant === "about" && (
+            <>
+              <motion.path
+                d="M 8 96 C 10 82, 14 70, 20 60 C 24 53, 27 44, 28 30"
+                fill="none"
+                stroke={palette.vine}
+                strokeWidth="1.15"
+                strokeLinecap="round"
+                filter={`url(#${filterId})`}
+                variants={vineVariants}
+              />
+              <motion.path
+                d="M 18 88 C 22 78, 26 68, 31 56 C 34 49, 36 41, 36 26"
+                fill="none"
+                stroke={palette.vine}
+                strokeWidth="0.9"
+                strokeLinecap="round"
+                filter={`url(#${filterId})`}
+                variants={vineVariants}
+              />
+              <motion.path
+                d="M 20 60 C 25 57, 29 53, 34 48"
+                fill="none"
+                stroke={palette.vine}
+                strokeWidth="0.78"
+                strokeLinecap="round"
+                filter={`url(#${filterId})`}
+                variants={vineVariants}
+              />
+
+              <motion.ellipse
+                cx="26"
+                cy="67"
+                rx="1.8"
+                ry="4.8"
+                fill={palette.leaf}
+                transform="rotate(-8 26 67)"
+                variants={leafVariants}
+              />
+              <motion.ellipse
+                cx="33"
+                cy="55"
+                rx="1.55"
+                ry="4.2"
+                fill={palette.leafAlt}
+                transform="rotate(24 33 55)"
+                variants={leafVariants}
+              />
+              <motion.ellipse
+                cx="22"
+                cy="77"
+                rx="1.45"
+                ry="3.7"
+                fill={palette.leafAlt}
+                transform="rotate(-14 22 77)"
+                variants={leafVariants}
+              />
+            </>
+          )}
+
+          {variant === "projects" && (
+            <>
+              <motion.path
+                d="M 28 96 C 30 86, 33 76, 40 66 C 47 56, 49 46, 49 28"
+                fill="none"
+                stroke={palette.vine}
+                strokeWidth="1.15"
+                strokeLinecap="round"
+                filter={`url(#${filterId})`}
+                variants={vineVariants}
+              />
+              <motion.path
+                d="M 72 96 C 70 84, 66 74, 59 64 C 53 55, 51 45, 51 28"
+                fill="none"
+                stroke={palette.vine}
+                strokeWidth="1.15"
+                strokeLinecap="round"
+                filter={`url(#${filterId})`}
+                variants={vineVariants}
+              />
+              <motion.path
+                d="M 50 96 C 50 88, 50 80, 50 72"
+                fill="none"
+                stroke={palette.vine}
+                strokeWidth="0.82"
+                strokeLinecap="round"
+                filter={`url(#${filterId})`}
+                variants={vineVariants}
+              />
+
+              <motion.ellipse
+                cx="39"
+                cy="67"
+                rx="1.8"
+                ry="4.3"
+                fill={palette.leaf}
+                transform="rotate(-30 39 67)"
+                variants={leafVariants}
+              />
+              <motion.ellipse
+                cx="61"
+                cy="65"
+                rx="1.8"
+                ry="4.3"
+                fill={palette.leafAlt}
+                transform="rotate(28 61 65)"
+                variants={leafVariants}
+              />
+              <motion.ellipse
+                cx="45"
+                cy="52"
+                rx="1.55"
+                ry="3.6"
+                fill={palette.leafAlt}
+                transform="rotate(18 45 52)"
+                variants={leafVariants}
+              />
+              <motion.ellipse
+                cx="56"
+                cy="50"
+                rx="1.55"
+                ry="3.6"
+                fill={palette.leaf}
+                transform="rotate(-18 56 50)"
+                variants={leafVariants}
+              />
+            </>
+          )}
+
+          {variant === "opportunities" && (
+            <>
+              <motion.path
+                d="M 92 96 C 90 82, 86 70, 80 60 C 76 53, 73 44, 72 30"
+                fill="none"
+                stroke={palette.vine}
+                strokeWidth="1.15"
+                strokeLinecap="round"
+                filter={`url(#${filterId})`}
+                variants={vineVariants}
+              />
+              <motion.path
+                d="M 82 88 C 78 78, 74 68, 69 56 C 66 49, 64 41, 64 26"
+                fill="none"
+                stroke={palette.vine}
+                strokeWidth="0.9"
+                strokeLinecap="round"
+                filter={`url(#${filterId})`}
+                variants={vineVariants}
+              />
+              <motion.path
+                d="M 80 60 C 75 57, 71 53, 66 48"
+                fill="none"
+                stroke={palette.vine}
+                strokeWidth="0.78"
+                strokeLinecap="round"
+                filter={`url(#${filterId})`}
+                variants={vineVariants}
+              />
+
+              <motion.ellipse
+                cx="74"
+                cy="67"
+                rx="1.8"
+                ry="4.8"
+                fill={palette.leaf}
+                transform="rotate(8 74 67)"
+                variants={leafVariants}
+              />
+              <motion.ellipse
+                cx="67"
+                cy="55"
+                rx="1.55"
+                ry="4.2"
+                fill={palette.leafAlt}
+                transform="rotate(-24 67 55)"
+                variants={leafVariants}
+              />
+              <motion.ellipse
+                cx="78"
+                cy="77"
+                rx="1.45"
+                ry="3.7"
+                fill={palette.leafAlt}
+                transform="rotate(14 78 77)"
+                variants={leafVariants}
+              />
+            </>
+          )}
+        </motion.svg>
+      </motion.div>
+    );
+  }
+
+  const sourceProgress = progress!;
+
+  const rootOpacity = useTransform(
+    sourceProgress,
+    [0, 0.16, 0.5, 0.84, 1],
+    [0.12, 0.42, 1, 0.42, 0.12]
+  );
+
+  const floatY = useTransform(
+    sourceProgress,
+    [0, 0.5, 1],
+    [0, -1, 0]
+  );
+
+  const vinePrimary = useTransform(
+    sourceProgress,
+    [0, 0.18, 0.5, 0.82, 1],
+    [0, 0.55, 1, 0.55, 0]
+  );
+
+  const vineSecondary = useTransform(
+    sourceProgress,
+    [0, 0.26, 0.56, 0.86, 1],
+    [0, 0.35, 0.9, 0.35, 0]
+  );
+
+  const vineBranch = useTransform(
+    sourceProgress,
+    [0, 0.34, 0.62, 0.9, 1],
+    [0, 0.18, 0.82, 0.18, 0]
+  );
+
+  const vineOpacityPrimary = useTransform(
+    sourceProgress,
+    [0, 0.18, 0.5, 0.82, 1],
+    [0, 0.55, 1, 0.55, 0]
+  );
+
+  const vineOpacitySecondary = useTransform(
+    sourceProgress,
+    [0, 0.24, 0.56, 0.86, 1],
+    [0, 0.35, 0.94, 0.35, 0]
+  );
+
+  const vineOpacityBranch = useTransform(
+    sourceProgress,
+    [0, 0.32, 0.62, 0.9, 1],
+    [0, 0.18, 0.84, 0.18, 0]
+  );
+
+  const leafScale = useTransform(
+    sourceProgress,
+    [0, 0.38, 0.66, 0.92, 1],
+    [0.45, 0.64, 1, 0.64, 0.45]
+  );
+
+  const leafOpacity = useTransform(
+    sourceProgress,
+    [0, 0.34, 0.64, 0.9, 1],
+    [0, 0.22, 1, 0.22, 0]
+  );
+
+  const leafRotateLeft = useTransform(
+    sourceProgress,
+    [0, 0.64, 1],
+    [-16, 0, -16]
+  );
+
+  const leafRotateRight = useTransform(
+    sourceProgress,
+    [0, 0.64, 1],
+    [16, 0, 16]
+  );
 
   return (
     <motion.div
@@ -107,13 +418,7 @@ export default function PortalGrowth({
         style={{ y: floatY }}
       >
         <defs>
-          <filter
-            id={filterId}
-            x="-50%"
-            y="-50%"
-            width="200%"
-            height="200%"
-          >
+          <filter id={filterId} x="-50%" y="-50%" width="200%" height="200%">
             <feGaussianBlur stdDeviation="1.3" result="blur" />
             <feMerge>
               <feMergeNode in="blur" />
@@ -236,63 +541,6 @@ export default function PortalGrowth({
           </>
         )}
 
-        {variant === "about" && !mobile && (
-          <>
-            <motion.path
-              d="M 8 96 C 10 82, 14 70, 20 60 C 24 53, 27 44, 28 30"
-              fill="none"
-              stroke={palette.vine}
-              strokeWidth="1.15"
-              strokeLinecap="round"
-              filter={`url(#${filterId})`}
-              style={{ pathLength: vinePrimary, opacity: vineOpacityPrimary }}
-            />
-            <motion.path
-              d="M 18 88 C 22 78, 26 68, 31 56 C 34 49, 36 41, 36 26"
-              fill="none"
-              stroke={palette.vine}
-              strokeWidth="0.9"
-              strokeLinecap="round"
-              filter={`url(#${filterId})`}
-              style={{ pathLength: vineSecondary, opacity: vineOpacitySecondary }}
-            />
-            <motion.path
-              d="M 20 60 C 25 57, 29 53, 34 48"
-              fill="none"
-              stroke={palette.vine}
-              strokeWidth="0.78"
-              strokeLinecap="round"
-              filter={`url(#${filterId})`}
-              style={{ pathLength: vineBranch, opacity: vineOpacityBranch }}
-            />
-
-            <motion.ellipse
-              cx="26"
-              cy="67"
-              rx="1.8"
-              ry="4.8"
-              fill={palette.leaf}
-              style={{ scale: leafScale, opacity: leafOpacity, rotate: leafRotateLeft, transformOrigin: "26px 67px" }}
-            />
-            <motion.ellipse
-              cx="33"
-              cy="55"
-              rx="1.55"
-              ry="4.2"
-              fill={palette.leafAlt}
-              style={{ scale: leafScale, opacity: leafOpacity, rotate: leafRotateRight, transformOrigin: "33px 55px" }}
-            />
-            <motion.ellipse
-              cx="22"
-              cy="77"
-              rx="1.45"
-              ry="3.7"
-              fill={palette.leafAlt}
-              style={{ scale: leafScale, opacity: leafOpacity, rotate: leafRotateLeft, transformOrigin: "22px 77px" }}
-            />
-          </>
-        )}
-
         {variant === "projects" && (
           <>
             <motion.path
@@ -354,63 +602,6 @@ export default function PortalGrowth({
               ry="3.6"
               fill={palette.leaf}
               style={{ scale: leafScale, opacity: leafOpacity, rotate: leafRotateLeft, transformOrigin: "56px 50px" }}
-            />
-          </>
-        )}
-
-        {variant === "opportunities" && !mobile && (
-          <>
-            <motion.path
-              d="M 92 96 C 90 82, 86 70, 80 60 C 76 53, 73 44, 72 30"
-              fill="none"
-              stroke={palette.vine}
-              strokeWidth="1.15"
-              strokeLinecap="round"
-              filter={`url(#${filterId})`}
-              style={{ pathLength: vinePrimary, opacity: vineOpacityPrimary }}
-            />
-            <motion.path
-              d="M 82 88 C 78 78, 74 68, 69 56 C 66 49, 64 41, 64 26"
-              fill="none"
-              stroke={palette.vine}
-              strokeWidth="0.9"
-              strokeLinecap="round"
-              filter={`url(#${filterId})`}
-              style={{ pathLength: vineSecondary, opacity: vineOpacitySecondary }}
-            />
-            <motion.path
-              d="M 80 60 C 75 57, 71 53, 66 48"
-              fill="none"
-              stroke={palette.vine}
-              strokeWidth="0.78"
-              strokeLinecap="round"
-              filter={`url(#${filterId})`}
-              style={{ pathLength: vineBranch, opacity: vineOpacityBranch }}
-            />
-
-            <motion.ellipse
-              cx="74"
-              cy="67"
-              rx="1.8"
-              ry="4.8"
-              fill={palette.leaf}
-              style={{ scale: leafScale, opacity: leafOpacity, rotate: leafRotateRight, transformOrigin: "74px 67px" }}
-            />
-            <motion.ellipse
-              cx="67"
-              cy="55"
-              rx="1.55"
-              ry="4.2"
-              fill={palette.leafAlt}
-              style={{ scale: leafScale, opacity: leafOpacity, rotate: leafRotateLeft, transformOrigin: "67px 55px" }}
-            />
-            <motion.ellipse
-              cx="78"
-              cy="77"
-              rx="1.45"
-              ry="3.7"
-              fill={palette.leafAlt}
-              style={{ scale: leafScale, opacity: leafOpacity, rotate: leafRotateRight, transformOrigin: "78px 77px" }}
             />
           </>
         )}
