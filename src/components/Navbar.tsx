@@ -103,7 +103,7 @@ export default function Navbar({ locale }: NavbarProps) {
             className="z-[80] flex min-w-0 items-center gap-3"
           >
             <Image
-              src="/branding/head-png.png"
+              src="/branding/head-big.png"
               alt="Pó de Ser"
               width={52}
               height={52}

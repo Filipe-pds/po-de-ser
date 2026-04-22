@@ -13,12 +13,10 @@ const ANALYTICS_READY_EVENT = "podeser-ga-ready";
 
 declare global {
   interface Window {
-    dataLayer: unknown[];
     gtag?: (...args: unknown[]) => void;
     [key: `ga-disable-${string}`]: boolean | undefined;
   }
 }
-
 function getStoredConsent(): CookieConsent {
   if (typeof window === "undefined") return null;
 

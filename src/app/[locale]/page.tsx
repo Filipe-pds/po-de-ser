@@ -25,7 +25,7 @@ export default async function HomePage({
     currentLocale === "pt"
       ? {
           heroSubtitle:
-            "Arte, bem-estar e mobilidade internacional com um ritmo humano.",
+            "Sê o que quiseres, sê tu mesmo.",
           dustLines: [
             { normal: "Este Pó não é", accent: "um pó qualquer." },
             { normal: "Vem de", accent: "ti." },
@@ -40,7 +40,7 @@ export default async function HomePage({
         }
       : {
           heroSubtitle:
-            "Art, well-being, and international mobility with a human rhythm.",
+            "Be anything, be yourself.",
           dustLines: [
             { normal: "This Dust is not", accent: "just any dust." },
             { normal: "It comes from", accent: "you." },

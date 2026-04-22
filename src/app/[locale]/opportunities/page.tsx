@@ -57,7 +57,7 @@ function SectionHeading({
   );
 }
 
-function ApplicationCard({
+function OpportunityCard({
   item,
   locale,
   status,
@@ -84,7 +84,7 @@ function ApplicationCard({
 
   return (
     <article
-      className={`group relative min-h-[35rem] overflow-hidden rounded-[2rem] ring-1 ring-black/5 shadow-[0_14px_34px_rgba(0,0,0,0.06)] ${
+      className={`group relative min-h-[34rem] overflow-hidden rounded-[2rem] ring-1 ring-black/5 shadow-[0_14px_34px_rgba(0,0,0,0.06)] ${
         status === "closed" ? "opacity-85" : ""
       }`}
     >
@@ -109,7 +109,7 @@ function ApplicationCard({
         </div>
       ) : null}
 
-      <div className="relative z-10 flex min-h-[35rem] flex-col p-6 text-white md:p-7">
+      <div className="relative z-10 flex min-h-[34rem] flex-col p-6 text-white md:p-7">
         <div className="flex flex-wrap items-center gap-3">
           {item.kind ? (
             <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs backdrop-blur-sm">
@@ -197,7 +197,7 @@ function ApplicationCard({
   );
 }
 
-function ErasmusCard({
+function InfoCard({
   title,
   text,
 }: {
@@ -224,7 +224,80 @@ export default async function OpportunitiesPage({
   }
 
   const currentLocale = locale as Locale;
-  const t = dictionary[currentLocale].opportunitiesPage;
+  const labels = dictionary[currentLocale].opportunitiesPage;
+
+  const pageCopy =
+    currentLocale === "pt"
+      ? {
+          eyebrow: "Oportunidades",
+          title: "Do Pó nascem novas formas de Ser.",
+intro:
+  "Intercâmbios juvenis, cursos de formação e outras experiências internacionais.",
+          openEyebrow: "Candidaturas",
+          explainEyebrow: "Erasmus+",
+          explainTitle: "O que é o Erasmus+?",
+          explainIntro:
+            "O Erasmus+ é o programa da União Europeia para a educação, formação, juventude e desporto. No campo da juventude, apoia experiências de aprendizagem não-formal, mobilidade internacional, intercâmbio, desenvolvimento de competências e cooperação entre organizações.",
+          erasmusCard1Title: "Em geral",
+          erasmusCard1Text:
+            "Para muitas pessoas, Erasmus+ é a primeira oportunidade de viajar com propósito, conhecer outras realidades e aprender num contexto internacional acessível. Não se trata apenas de viajar — trata-se de participar, conviver, refletir e crescer.",
+          erasmusCard2Title: "Youth Exchanges",
+          erasmusCard2Text:
+            "Os Youth Exchanges juntam grupos de jovens de diferentes países para viver um programa de aprendizagem não-formal sobre um tema comum. Costumam incluir workshops, debates, dinâmicas, jogos, atividades criativas e momentos de intercâmbio cultural.",
+          erasmusCard3Title: "Training Courses",
+          erasmusCard3Text:
+            "As Training Courses e outras mobilidades para youth workers focam-se mais no desenvolvimento profissional e metodológico. Podem incluir formação, seminários, workshops, job shadowing, peer learning e networking entre pessoas e organizações que trabalham com jovens.",
+          resourcesTitle: "Links úteis",
+          resourcesIntro:
+            "Se quiseres perceber melhor o programa, consultar informação oficial ou explorar a Agência Nacional em Portugal, estes são bons pontos de partida.",
+          generalLink: "Página oficial Erasmus+",
+          youthExchangesLink: "Youth Exchanges",
+          trainingCoursesLink: "Youth worker mobility",
+          agencyTitle: "Agência Nacional em Portugal",
+          agencyText:
+            "Em Portugal, a informação oficial para juventude, desporto e Corpo Europeu de Solidariedade está disponível em Juventude.pt.",
+          agencyLink: "Abrir Juventude.pt",
+          closedTitle: "Oportunidades anteriores",
+          helpTitle: "Não sabes por onde começar?",
+          helpText:
+            "Se tens dúvidas sobre alguma oportunidade, sobre o que é um Youth Exchange, ou se isto pode fazer sentido para ti, fala connosco.",
+          contact: "Contactar",
+        }
+      : {
+          eyebrow: "Opportunities",
+          title: "From Sust, new ways of Being emerge.",
+intro:
+  "Youth Exchanges, Training Courses, and other international experiences.",
+          openEyebrow: "Applications",
+          explainEyebrow: "Erasmus+",
+          explainTitle: "What is Erasmus+?",
+          explainIntro:
+            "Erasmus+ is the European Union programme for education, training, youth, and sport. In the youth field, it supports non-formal learning, international mobility, skill development, exchange, and cooperation between organisations.",
+          erasmusCard1Title: "In general",
+          erasmusCard1Text:
+            "For many people, Erasmus+ is a first opportunity to travel with purpose, meet other realities, and learn in an accessible international setting. It is not only about travelling — it is about participating, sharing, reflecting, and growing.",
+          erasmusCard2Title: "Youth Exchanges",
+          erasmusCard2Text:
+            "Youth Exchanges bring together groups of young people from different countries to take part in a non-formal learning programme around a shared theme. They often include workshops, debates, games, creative activities, and intercultural exchange.",
+          erasmusCard3Title: "Training Courses",
+          erasmusCard3Text:
+            "Training Courses and other youth worker mobility activities focus more on professional and methodological development. They can include training, seminars, workshops, job shadowing, peer learning, and networking among people and organisations working with young people.",
+          resourcesTitle: "Useful links",
+          resourcesIntro:
+            "If you want to understand the programme better, read official information, or explore the National Agency in Portugal, these are good places to start.",
+          generalLink: "Official Erasmus+ page",
+          youthExchangesLink: "Youth Exchanges",
+          trainingCoursesLink: "Youth worker mobility",
+          agencyTitle: "National Agency in Portugal",
+          agencyText:
+            "In Portugal, official information for youth, sport, and the European Solidarity Corps is available through Juventude.pt.",
+          agencyLink: "Open Juventude.pt",
+          closedTitle: "Past opportunities",
+          helpTitle: "Not sure where to start?",
+          helpText:
+            "If you have questions about an opportunity, about what a Youth Exchange is, or whether this could make sense for you, talk to us.",
+          contact: "Contact",
+        };
 
   const opportunities = await client.fetch<Opportunity[]>(
     OPPORTUNITIES_QUERY,
@@ -249,59 +322,54 @@ export default async function OpportunitiesPage({
       <Navbar locale={currentLocale} />
 
       <main className="bg-[var(--cream)]">
-        <section className="relative overflow-hidden border-b border-black/5">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(122,45,45,0.10),transparent_42%)]" />
-          <div className="absolute left-[8%] top-10 h-28 w-28 rounded-full bg-[rgba(122,45,45,0.06)] blur-3xl" />
-          <div className="absolute right-[10%] top-24 h-32 w-32 rounded-full bg-[rgba(80,116,116,0.06)] blur-3xl" />
+        <section className="relative min-h-[calc(100svh-72px)] overflow-hidden text-white">
+          <Image
+            src="/opportunities/cover3.jpg"
+            alt={pageCopy.title}
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-[50%_70%]"
+          />
 
-          <div className="relative mx-auto max-w-6xl px-6 pb-12 pt-10 md:pb-14 md:pt-12">
-            <p className="mb-3 text-sm uppercase tracking-[0.22em] text-[var(--brand)]">
-              {t.eyebrow}
-            </p>
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(15,12,15,0.74)_0%,rgba(15,12,15,0.50)_34%,rgba(15,12,15,0.18)_62%,rgba(15,12,15,0.30)_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,12,15,0.08)_0%,rgba(15,12,15,0.16)_34%,rgba(15,12,15,0.58)_100%)]" />
 
-            <h1 className="max-w-4xl text-4xl font-semibold leading-[1.04] text-[var(--ink)] md:text-6xl">
-              {t.title}
-            </h1>
+          <div className="relative z-10 mx-auto flex min-h-[calc(100svh-72px)] max-w-6xl items-end px-6 pb-16 pt-24 md:pb-20">
+            <div className="max-w-3xl">
+              <p className="mb-3 text-sm uppercase tracking-[0.22em] text-white/82">
+                {pageCopy.eyebrow}
+              </p>
 
-            <p className="mt-5 max-w-2xl text-base leading-7 text-[var(--muted)] md:text-lg md:leading-8">
-              {t.intro}
-            </p>
+              <h1 className="max-w-[11ch] text-4xl font-semibold leading-[1.02] text-white md:text-6xl">
+                {pageCopy.title}
+              </h1>
 
-            <div className="mt-7 flex flex-wrap gap-3">
-              <a
-                href="#open-applications"
-                className="inline-flex items-center gap-2 rounded-full bg-[var(--brand)] px-5 py-3 text-sm font-medium text-white transition hover:opacity-90"
-              >
-                <span>{t.openTitle}</span>
-                <span aria-hidden="true">↓</span>
-              </a>
-
-              <a
-                href="#erasmus-explained"
-                className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white/70 px-5 py-3 text-sm font-medium text-[var(--ink)] backdrop-blur-sm transition hover:border-[var(--brand)] hover:text-[var(--brand)]"
-              >
-                <span>{t.erasmusCta}</span>
-                <span aria-hidden="true">→</span>
-              </a>
+              <p className="mt-5 max-w-[34rem] text-base leading-7 text-white/84 md:text-lg md:leading-8">
+                {pageCopy.intro}
+              </p>
             </div>
           </div>
+
+          <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-b from-transparent via-[rgba(247,241,232,0.08)] to-[var(--cream)]" />
         </section>
 
-        <section id="open-applications" className="relative">
-          <div className="pointer-events-none absolute inset-x-0 top-0 hidden h-24 bg-gradient-to-b from-[var(--cream)] to-transparent md:block" />
-
+        <section id="open-opportunities" className="bg-[var(--cream)]">
           <div className="mx-auto max-w-6xl px-6 py-12 md:py-14">
-            <SectionHeading title={t.openTitle} />
+            <SectionHeading
+              eyebrow={pageCopy.openEyebrow}
+              title={labels.openTitle}
+            />
 
             {openItems.length === 0 ? (
               <div className="mt-8 rounded-[1.75rem] bg-white/78 p-8 shadow-sm ring-1 ring-black/5 backdrop-blur-sm">
-                <p className="text-[var(--muted)]">{t.empty}</p>
+                <p className="text-[var(--muted)]">{labels.empty}</p>
               </div>
             ) : (
               <>
                 <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
                   {openItems.map((item) => (
-                    <ApplicationCard
+                    <OpportunityCard
                       key={item._id}
                       item={item}
                       locale={currentLocale}
@@ -313,19 +381,19 @@ export default async function OpportunitiesPage({
                 <aside className="mt-8 rounded-[1.75rem] bg-white/74 p-5 text-sm leading-6 text-[var(--muted)] shadow-sm ring-1 ring-black/5 backdrop-blur-sm md:p-6">
                   <p>
                     <span className="font-medium text-[var(--brand)]">
-                      {t.fundingTitle}:
+                      {labels.fundingTitle}:
                     </span>{" "}
-                    {t.fundingText}
+                    {labels.fundingText}
                   </p>
 
-                  <p className="mt-2">{t.refundText}</p>
+                  <p className="mt-2">{labels.refundText}</p>
 
                   {shouldShowMembershipNote ? (
                     <p className="mt-3 border-t border-black/5 pt-3">
                       <span className="font-medium text-[var(--brand)]">
-                        {t.membershipTitle}:
+                        {labels.membershipTitle}:
                       </span>{" "}
-                      {t.membershipText}
+                      {labels.membershipText}
                     </p>
                   ) : null}
                 </aside>
@@ -336,33 +404,130 @@ export default async function OpportunitiesPage({
 
         <section id="erasmus-explained" className="bg-white/45">
           <div className="mx-auto max-w-6xl px-6 py-14 md:py-16">
-            <SectionHeading title={t.erasmusTitle} text={t.erasmusIntro} />
+            <SectionHeading
+              eyebrow={pageCopy.explainEyebrow}
+              title={pageCopy.explainTitle}
+              text={pageCopy.explainIntro}
+            />
 
             <div className="mt-10 grid gap-6 md:grid-cols-3">
-              <ErasmusCard
-                title={t.erasmusCard1Title}
-                text={t.erasmusCard1Text}
+              <InfoCard
+                title={pageCopy.erasmusCard1Title}
+                text={pageCopy.erasmusCard1Text}
               />
-              <ErasmusCard
-                title={t.erasmusCard2Title}
-                text={t.erasmusCard2Text}
+              <InfoCard
+                title={pageCopy.erasmusCard2Title}
+                text={pageCopy.erasmusCard2Text}
               />
-              <ErasmusCard
-                title={t.erasmusCard3Title}
-                text={t.erasmusCard3Text}
+              <InfoCard
+                title={pageCopy.erasmusCard3Title}
+                text={pageCopy.erasmusCard3Text}
               />
             </div>
           </div>
         </section>
 
+        <section className="bg-[var(--cream)]">
+          <div className="mx-auto max-w-6xl px-6 py-14 md:py-16">
+            <SectionHeading
+              title={pageCopy.resourcesTitle}
+              text={pageCopy.resourcesIntro}
+            />
+
+            <div className="mt-10 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+              <div className="rounded-[1.75rem] bg-white/82 p-6 shadow-sm ring-1 ring-black/5 backdrop-blur-sm md:p-7">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <a
+                    href="https://erasmus-plus.ec.europa.eu/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="rounded-[1.25rem] border border-black/5 bg-[var(--cream)]/70 p-4 transition hover:border-[var(--brand)]/30 hover:bg-white"
+                  >
+                    <p className="font-medium text-[var(--ink)]">
+                      {pageCopy.generalLink}
+                    </p>
+                    <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
+                      Erasmus+
+                    </p>
+                  </a>
+
+                  <a
+                    href="https://erasmus-plus.ec.europa.eu/programme-guide/part-b/key-action-1/youth-exchanges"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="rounded-[1.25rem] border border-black/5 bg-[var(--cream)]/70 p-4 transition hover:border-[var(--brand)]/30 hover:bg-white"
+                  >
+                    <p className="font-medium text-[var(--ink)]">
+                      {pageCopy.youthExchangesLink}
+                    </p>
+                    <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
+                      Erasmus+ Programme Guide
+                    </p>
+                  </a>
+
+                  <a
+                    href="https://erasmus-plus.ec.europa.eu/programme-guide/part-b/key-action-1/youth-workers"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="rounded-[1.25rem] border border-black/5 bg-[var(--cream)]/70 p-4 transition hover:border-[var(--brand)]/30 hover:bg-white"
+                  >
+                    <p className="font-medium text-[var(--ink)]">
+                      {pageCopy.trainingCoursesLink}
+                    </p>
+                    <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
+                      Erasmus+ Programme Guide
+                    </p>
+                  </a>
+
+                  <a
+                    href="https://www.juventude.pt/pt/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="rounded-[1.25rem] border border-black/5 bg-[var(--cream)]/70 p-4 transition hover:border-[var(--brand)]/30 hover:bg-white"
+                  >
+                    <p className="font-medium text-[var(--ink)]">
+                      {pageCopy.agencyLink}
+                    </p>
+                    <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
+                      Juventude.pt
+                    </p>
+                  </a>
+                </div>
+              </div>
+
+              <div className="rounded-[1.75rem] bg-white/82 p-6 shadow-sm ring-1 ring-black/5 backdrop-blur-sm md:p-7">
+                <div className="flex h-full flex-col justify-between">
+                  <div>
+                    <h3 className="text-xl font-semibold text-[var(--brand)]">
+                      {pageCopy.agencyTitle}
+                    </h3>
+
+                    <p className="mt-4 leading-7 text-[var(--muted)]">
+                      {pageCopy.agencyText}
+                    </p>
+                  </div>
+
+                  <div className="mt-8 rounded-[1.25rem] border border-black/5 bg-[var(--cream)]/70 p-4">
+                    <img
+                      src="/partners/juventude-logo.png"
+                      alt="Agência Nacional Erasmus+ Juventude / Desporto e Corpo Europeu de Solidariedade"
+                      className="h-16 w-auto object-contain"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {closedItems.length > 0 ? (
-          <section className="bg-[var(--cream)]">
+          <section className="bg-white/45">
             <div className="mx-auto max-w-6xl px-6 py-14 md:py-16">
-              <SectionHeading title={t.closedTitle} />
+              <SectionHeading title={pageCopy.closedTitle} />
 
               <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
                 {closedItems.map((item) => (
-                  <ApplicationCard
+                  <OpportunityCard
                     key={item._id}
                     item={item}
                     locale={currentLocale}
@@ -379,18 +544,18 @@ export default async function OpportunitiesPage({
             <div className="overflow-hidden rounded-[2rem] bg-[linear-gradient(180deg,#231b24_0%,#2b2631_52%,#25303a_100%)] px-6 py-10 text-white shadow-[0_18px_50px_rgba(0,0,0,0.10)] md:px-10 md:py-12">
               <div className="max-w-3xl">
                 <h2 className="text-3xl font-semibold leading-tight md:text-4xl">
-                  {t.helpTitle}
+                  {pageCopy.helpTitle}
                 </h2>
 
                 <p className="mt-4 text-base leading-7 text-white/82 md:text-lg md:leading-8">
-                  {t.helpText}
+                  {pageCopy.helpText}
                 </p>
 
                 <Link
                   href={`/${currentLocale}/contact`}
                   className="mt-8 inline-flex rounded-full bg-[var(--brand)] px-6 py-3 text-sm font-medium text-white transition hover:opacity-90"
                 >
-                  {t.contact}
+                  {pageCopy.contact}
                 </Link>
               </div>
             </div>
