@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import PortalGrowth from "@/components/PortalGrowth";
 
 type PortalVariant = "about" | "projects" | "opportunities";
@@ -65,19 +65,19 @@ const mobileSparkMap: Record<
   { left: string; top: string; size: number }[]
 > = {
   about: [
-    { left: "18%", top: "24%", size: 5 },
-    { left: "34%", top: "58%", size: 6 },
-    { left: "20%", top: "78%", size: 7 },
+    { left: "16%", top: "22%", size: 5 },
+    { left: "30%", top: "48%", size: 6 },
+    { left: "24%", top: "72%", size: 7 },
   ],
   projects: [
-    { left: "46%", top: "18%", size: 5 },
-    { left: "58%", top: "56%", size: 6 },
-    { left: "42%", top: "82%", size: 5 },
+    { left: "46%", top: "16%", size: 5 },
+    { left: "60%", top: "44%", size: 6 },
+    { left: "44%", top: "72%", size: 5 },
   ],
   opportunities: [
-    { left: "72%", top: "26%", size: 5 },
-    { left: "64%", top: "56%", size: 6 },
-    { left: "56%", top: "80%", size: 7 },
+    { left: "74%", top: "22%", size: 5 },
+    { left: "66%", top: "48%", size: 6 },
+    { left: "58%", top: "72%", size: 7 },
   ],
 };
 
@@ -90,18 +90,37 @@ export default function HomeMobilePortalCard({
   const theme = mobilePortalTheme[variant];
   const ref = useRef<HTMLAnchorElement | null>(null);
 
-  const isInView = useInView(ref, {
-    amount: 0.45,
-    once: false,
-    margin: "-10% 0px -10% 0px",
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start 92%", "end 24%"],
   });
+
+  const mistOpacity = useTransform(scrollYProgress, [0, 0.22, 0.55, 1], [0.45, 0.6, 0.88, 1]);
+  const sparkOpacity = useTransform(scrollYProgress, [0, 0.22, 0.58, 1], [0.22, 0.4, 0.82, 0.95]);
+  const sparkScale = useTransform(scrollYProgress, [0, 0.3, 0.65, 1], [0.82, 0.92, 1, 1.08]);
+
+  const portalScale = useTransform(scrollYProgress, [0, 0.22, 0.6, 1], [0.94, 0.965, 1, 1.03]);
+  const portalY = useTransform(scrollYProgress, [0, 0.22, 0.6, 1], [10, 6, 0, -2]);
+
+  const textOpacity = useTransform(scrollYProgress, [0, 0.28, 0.6, 1], [0.7, 0.82, 0.96, 1]);
+  const textY = useTransform(scrollYProgress, [0, 0.28, 0.6, 1], [12, 8, 2, 0]);
 
   const growthPosition =
     variant === "about"
-      ? "absolute -left-[42%] top-[6%] h-[108%] w-[90%]"
+      ? "absolute -left-[54%] -top-[10%] h-[124%] w-[116%]"
       : variant === "opportunities"
-        ? "absolute -right-[42%] top-[6%] h-[108%] w-[90%]"
-        : "absolute -left-[16%] top-[0%] h-[112%] w-[132%]";
+        ? "absolute -right-[54%] -top-[10%] h-[124%] w-[116%]"
+        : "absolute -left-[20%] -top-[8%] h-[122%] w-[142%]";
+
+  const portalTop = variant === "projects" ? "top-[48%]" : "top-[46%]";
+  const outerSize =
+    variant === "projects"
+      ? "h-[48%] w-[36%]"
+      : "h-[46%] w-[35%]";
+  const coreSize =
+    variant === "projects"
+      ? "h-[34%] w-[25%]"
+      : "h-[33%] w-[24%]";
 
   return (
     <Link
@@ -115,11 +134,10 @@ export default function HomeMobilePortalCard({
     >
       <motion.div
         className="absolute inset-0"
-        style={{ background: theme.mist }}
-        animate={{
-          opacity: isInView ? 1 : 0.65,
+        style={{
+          background: theme.mist,
+          opacity: mistOpacity,
         }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
       />
 
       <div className="relative h-[21rem]">
@@ -134,24 +152,21 @@ export default function HomeMobilePortalCard({
               height: spark.size,
               background: theme.spark,
               boxShadow: `0 0 14px ${theme.spark}`,
+              opacity: sparkOpacity,
+              scale: sparkScale,
             }}
-            animate={{
-              opacity: isInView ? 0.9 : 0.45,
-              scale: isInView ? 1 : 0.85,
-            }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
           />
         ))}
 
         <motion.div
-          className="absolute left-1/2 top-[54%] h-[46%] w-[34%] -translate-x-1/2 -translate-y-1/2 rounded-t-[999px] rounded-b-[2rem]"
-          animate={{
-            scale: isInView ? 1 : 0.97,
+          className={`absolute left-1/2 ${portalTop} -translate-x-1/2 -translate-y-1/2 rounded-t-[999px] rounded-b-[2rem] ${outerSize}`}
+          style={{
+            scale: portalScale,
+            y: portalY,
           }}
-          transition={{ duration: 0.45, ease: "easeOut" }}
         >
           <div className={`${growthPosition} pointer-events-none overflow-visible`}>
-            <PortalGrowth variant={variant} active={isInView} />
+            <PortalGrowth variant={variant} progress={scrollYProgress} mobile />
           </div>
 
           <div
@@ -163,21 +178,22 @@ export default function HomeMobilePortalCard({
           />
         </motion.div>
 
-        <div
-          className="absolute left-1/2 top-[54%] h-[33%] w-[24%] -translate-x-1/2 -translate-y-1/2 rounded-t-[999px] rounded-b-[1.5rem]"
+        <motion.div
+          className={`absolute left-1/2 ${portalTop} -translate-x-1/2 -translate-y-1/2 rounded-t-[999px] rounded-b-[1.5rem] ${coreSize}`}
           style={{
             background: theme.core,
             boxShadow: "inset 0 0 22px rgba(255,255,255,0.05)",
+            scale: portalScale,
+            y: portalY,
           }}
         />
 
         <motion.div
           className="absolute inset-x-0 bottom-0 p-6"
-          animate={{
-            opacity: isInView ? 1 : 0.82,
-            y: isInView ? 0 : 6,
+          style={{
+            opacity: textOpacity,
+            y: textY,
           }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
         >
           <h3 className="text-3xl font-semibold text-white">{title}</h3>
           <p className="mt-3 text-sm text-white/84">{hoverText} →</p>

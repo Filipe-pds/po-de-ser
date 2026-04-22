@@ -24,8 +24,7 @@ export default async function HomePage({
   const copy =
     currentLocale === "pt"
       ? {
-          heroSubtitle:
-            "Sê o que quiseres, sê tu mesmo.",
+          heroSubtitle: "Sê o que quiseres, sê tu mesmo.",
           dustLines: [
             { normal: "Este Pó não é", accent: "um pó qualquer." },
             { normal: "Vem de", accent: "ti." },
@@ -39,8 +38,7 @@ export default async function HomePage({
           opportunitiesHover: "Ver candidaturas e próximas experiências",
         }
       : {
-          heroSubtitle:
-            "Be anything, be yourself.",
+          heroSubtitle: "Be anything, be yourself.",
           dustLines: [
             { normal: "This Dust is not", accent: "just any dust." },
             { normal: "It comes from", accent: "you." },
@@ -111,33 +109,27 @@ export default async function HomePage({
         </section>
 
         <section className="relative">
-          <div className="mx-auto grid max-w-6xl gap-5 px-6 py-12 md:hidden">
-            <ScrollReveal>
-              <HomeMobilePortalCard
-                href={`/${currentLocale}/about`}
-                title={copy.aboutTitle}
-                hoverText={copy.aboutHover}
-                variant="about"
-              />
-            </ScrollReveal>
+          <div className="mx-auto grid max-w-6xl gap-5 px-6 pb-12 pt-8 md:hidden">
+            <HomeMobilePortalCard
+              href={`/${currentLocale}/about`}
+              title={copy.aboutTitle}
+              hoverText={copy.aboutHover}
+              variant="about"
+            />
 
-            <ScrollReveal delay={0.05}>
-              <HomeMobilePortalCard
-                href={`/${currentLocale}/projects`}
-                title={copy.projectsTitle}
-                hoverText={copy.projectsHover}
-                variant="projects"
-              />
-            </ScrollReveal>
+            <HomeMobilePortalCard
+              href={`/${currentLocale}/projects`}
+              title={copy.projectsTitle}
+              hoverText={copy.projectsHover}
+              variant="projects"
+            />
 
-            <ScrollReveal delay={0.1}>
-              <HomeMobilePortalCard
-                href={`/${currentLocale}/opportunities`}
-                title={copy.opportunitiesTitle}
-                hoverText={copy.opportunitiesHover}
-                variant="opportunities"
-              />
-            </ScrollReveal>
+            <HomeMobilePortalCard
+              href={`/${currentLocale}/opportunities`}
+              title={copy.opportunitiesTitle}
+              hoverText={copy.opportunitiesHover}
+              variant="opportunities"
+            />
           </div>
 
           <div className="pointer-events-none absolute inset-x-0 top-0 z-10 hidden h-32 bg-gradient-to-b from-[var(--cream)] via-[rgba(247,241,232,0.72)] to-transparent md:block" />

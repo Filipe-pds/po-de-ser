@@ -1,13 +1,21 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
+import {
+  motion,
+  useMotionValue,
+  useTransform,
+  type MotionValue,
+} from "framer-motion";
+import { useEffect } from "react";
 
 type PortalVariant = "about" | "projects" | "opportunities";
 
 type PortalGrowthProps = {
   variant: PortalVariant;
-  active: boolean;
+  progress?: MotionValue<number>;
+  active?: boolean;
   tall?: boolean;
+  mobile?: boolean;
 };
 
 const palettes: Record<
@@ -39,85 +47,73 @@ const palettes: Record<
   },
 };
 
-const containerVariants: Variants = {
-  closed: {
-    opacity: 0.42,
-  },
-  open: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.08,
-      delayChildren: 0.04,
-    },
-  },
-};
-
-const vineVariants: Variants = {
-  closed: {
-    pathLength: 0,
-    opacity: 0,
-  },
-  open: {
-    pathLength: 1,
-    opacity: 1,
-    transition: {
-      duration: 0.8,
-      ease: "easeOut",
-    },
-  },
-};
-
-const leafVariants: Variants = {
-  closed: {
-    scale: 0.45,
-    opacity: 0,
-    rotate: -8,
-  },
-  open: {
-    scale: 1,
-    opacity: 1,
-    rotate: 0,
-    transition: {
-      duration: 0.38,
-      ease: "easeOut",
-    },
-  },
-};
-
 export default function PortalGrowth({
   variant,
+  progress,
   active,
   tall = false,
+  mobile = false,
 }: PortalGrowthProps) {
   const palette = palettes[variant];
+
+  const fallbackProgress = useMotionValue(active ? 1 : 0);
+  useEffect(() => {
+    if (!progress) {
+      fallbackProgress.set(active ? 1 : 0);
+    }
+  }, [active, progress, fallbackProgress]);
+
+  const sourceProgress = progress ?? fallbackProgress;
+
+  const centerStrength = useTransform(
+    sourceProgress,
+    [0, 0.18, 0.5, 0.82, 1],
+    [0.08, 0.55, 1, 0.55, 0.08]
+  );
+
+  const centerOpacity = useTransform(
+    sourceProgress,
+    [0, 0.2, 0.5, 0.8, 1],
+    [0, 0.42, 1, 0.42, 0]
+  );
+
+  const vinePrimary = useTransform(centerStrength, [0, 1], [0.12, 1]);
+  const vineSecondary = useTransform(centerStrength, [0, 1], [0.08, 0.9]);
+  const vineBranch = useTransform(centerStrength, [0, 1], [0.02, 0.82]);
+
+  const vineOpacityPrimary = useTransform(centerOpacity, [0, 1], [0, 1]);
+  const vineOpacitySecondary = useTransform(centerOpacity, [0, 1], [0, 0.94]);
+  const vineOpacityBranch = useTransform(centerOpacity, [0, 1], [0, 0.84]);
+
+  const leafScale = useTransform(centerStrength, [0, 1], [0.35, 1]);
+  const leafOpacity = useTransform(centerOpacity, [0, 1], [0, 1]);
+  const leafRotateLeft = useTransform(centerStrength, [0, 1], [-16, 0]);
+  const leafRotateRight = useTransform(centerStrength, [0, 1], [16, 0]);
+
+  const floatY = useTransform(centerStrength, [0, 1], [0, -1]);
+  const rootOpacity = useTransform(centerOpacity, [0, 1], [0.18, 1]);
+
+  const filterId = `glow-${variant}-${mobile ? "mobile" : "desktop"}-${tall ? "tall" : "base"}`;
 
   return (
     <motion.div
       className="pointer-events-none absolute inset-0 overflow-visible"
-      variants={containerVariants}
-      animate={active ? "open" : "closed"}
+      style={{ opacity: rootOpacity }}
     >
       <motion.svg
         viewBox="0 0 100 100"
         preserveAspectRatio="none"
         className="absolute inset-0 h-full w-full overflow-visible"
-        animate={
-          active
-            ? {
-                y: [0, -1, 0],
-              }
-            : {
-                y: 0,
-              }
-        }
-        transition={{
-          duration: 4,
-          repeat: active ? Infinity : 0,
-          ease: "easeInOut",
-        }}
+        style={{ y: floatY }}
       >
         <defs>
-          <filter id={`glow-${variant}`} x="-50%" y="-50%" width="200%" height="200%">
+          <filter
+            id={filterId}
+            x="-50%"
+            y="-50%"
+            width="200%"
+            height="200%"
+          >
             <feGaussianBlur stdDeviation="1.3" result="blur" />
             <feMerge>
               <feMergeNode in="blur" />
@@ -126,7 +122,121 @@ export default function PortalGrowth({
           </filter>
         </defs>
 
-        {variant === "about" && (
+        {variant === "about" && mobile && (
+          <>
+            <motion.path
+              d="M 8 92 C 10 78, 14 66, 20 54 C 25 42, 31 28, 40 16 C 47 8, 58 8, 67 10"
+              fill="none"
+              stroke={palette.vine}
+              strokeWidth="1.18"
+              strokeLinecap="round"
+              filter={`url(#${filterId})`}
+              style={{ pathLength: vinePrimary, opacity: vineOpacityPrimary }}
+            />
+            <motion.path
+              d="M 14 84 C 18 72, 22 60, 28 48 C 34 36, 41 26, 50 20"
+              fill="none"
+              stroke={palette.vine}
+              strokeWidth="0.95"
+              strokeLinecap="round"
+              filter={`url(#${filterId})`}
+              style={{ pathLength: vineSecondary, opacity: vineOpacitySecondary }}
+            />
+            <motion.path
+              d="M 24 58 C 31 56, 38 52, 45 47"
+              fill="none"
+              stroke={palette.vine}
+              strokeWidth="0.82"
+              strokeLinecap="round"
+              filter={`url(#${filterId})`}
+              style={{ pathLength: vineBranch, opacity: vineOpacityBranch }}
+            />
+
+            <motion.ellipse
+              cx="29"
+              cy="64"
+              rx="1.9"
+              ry="5"
+              fill={palette.leaf}
+              style={{ scale: leafScale, opacity: leafOpacity, rotate: leafRotateLeft, transformOrigin: "29px 64px" }}
+            />
+            <motion.ellipse
+              cx="39"
+              cy="49"
+              rx="1.6"
+              ry="4.3"
+              fill={palette.leafAlt}
+              style={{ scale: leafScale, opacity: leafOpacity, rotate: leafRotateRight, transformOrigin: "39px 49px" }}
+            />
+            <motion.ellipse
+              cx="20"
+              cy="77"
+              rx="1.5"
+              ry="3.8"
+              fill={palette.leafAlt}
+              style={{ scale: leafScale, opacity: leafOpacity, rotate: leafRotateLeft, transformOrigin: "20px 77px" }}
+            />
+          </>
+        )}
+
+        {variant === "opportunities" && mobile && (
+          <>
+            <motion.path
+              d="M 92 92 C 90 78, 86 66, 80 54 C 75 42, 69 28, 60 16 C 53 8, 42 8, 33 10"
+              fill="none"
+              stroke={palette.vine}
+              strokeWidth="1.18"
+              strokeLinecap="round"
+              filter={`url(#${filterId})`}
+              style={{ pathLength: vinePrimary, opacity: vineOpacityPrimary }}
+            />
+            <motion.path
+              d="M 86 84 C 82 72, 78 60, 72 48 C 66 36, 59 26, 50 20"
+              fill="none"
+              stroke={palette.vine}
+              strokeWidth="0.95"
+              strokeLinecap="round"
+              filter={`url(#${filterId})`}
+              style={{ pathLength: vineSecondary, opacity: vineOpacitySecondary }}
+            />
+            <motion.path
+              d="M 76 58 C 69 56, 62 52, 55 47"
+              fill="none"
+              stroke={palette.vine}
+              strokeWidth="0.82"
+              strokeLinecap="round"
+              filter={`url(#${filterId})`}
+              style={{ pathLength: vineBranch, opacity: vineOpacityBranch }}
+            />
+
+            <motion.ellipse
+              cx="71"
+              cy="64"
+              rx="1.9"
+              ry="5"
+              fill={palette.leaf}
+              style={{ scale: leafScale, opacity: leafOpacity, rotate: leafRotateRight, transformOrigin: "71px 64px" }}
+            />
+            <motion.ellipse
+              cx="61"
+              cy="49"
+              rx="1.6"
+              ry="4.3"
+              fill={palette.leafAlt}
+              style={{ scale: leafScale, opacity: leafOpacity, rotate: leafRotateLeft, transformOrigin: "61px 49px" }}
+            />
+            <motion.ellipse
+              cx="80"
+              cy="77"
+              rx="1.5"
+              ry="3.8"
+              fill={palette.leafAlt}
+              style={{ scale: leafScale, opacity: leafOpacity, rotate: leafRotateRight, transformOrigin: "80px 77px" }}
+            />
+          </>
+        )}
+
+        {variant === "about" && !mobile && (
           <>
             <motion.path
               d="M 8 96 C 10 82, 14 70, 20 60 C 24 53, 27 44, 28 30"
@@ -134,8 +244,8 @@ export default function PortalGrowth({
               stroke={palette.vine}
               strokeWidth="1.15"
               strokeLinecap="round"
-              filter={`url(#glow-${variant})`}
-              variants={vineVariants}
+              filter={`url(#${filterId})`}
+              style={{ pathLength: vinePrimary, opacity: vineOpacityPrimary }}
             />
             <motion.path
               d="M 18 88 C 22 78, 26 68, 31 56 C 34 49, 36 41, 36 26"
@@ -143,8 +253,8 @@ export default function PortalGrowth({
               stroke={palette.vine}
               strokeWidth="0.9"
               strokeLinecap="round"
-              filter={`url(#glow-${variant})`}
-              variants={vineVariants}
+              filter={`url(#${filterId})`}
+              style={{ pathLength: vineSecondary, opacity: vineOpacitySecondary }}
             />
             <motion.path
               d="M 20 60 C 25 57, 29 53, 34 48"
@@ -152,8 +262,8 @@ export default function PortalGrowth({
               stroke={palette.vine}
               strokeWidth="0.78"
               strokeLinecap="round"
-              filter={`url(#glow-${variant})`}
-              variants={vineVariants}
+              filter={`url(#${filterId})`}
+              style={{ pathLength: vineBranch, opacity: vineOpacityBranch }}
             />
 
             <motion.ellipse
@@ -162,8 +272,7 @@ export default function PortalGrowth({
               rx="1.8"
               ry="4.8"
               fill={palette.leaf}
-              transform="rotate(-8 26 67)"
-              variants={leafVariants}
+              style={{ scale: leafScale, opacity: leafOpacity, rotate: leafRotateLeft, transformOrigin: "26px 67px" }}
             />
             <motion.ellipse
               cx="33"
@@ -171,8 +280,7 @@ export default function PortalGrowth({
               rx="1.55"
               ry="4.2"
               fill={palette.leafAlt}
-              transform="rotate(24 33 55)"
-              variants={leafVariants}
+              style={{ scale: leafScale, opacity: leafOpacity, rotate: leafRotateRight, transformOrigin: "33px 55px" }}
             />
             <motion.ellipse
               cx="22"
@@ -180,8 +288,7 @@ export default function PortalGrowth({
               rx="1.45"
               ry="3.7"
               fill={palette.leafAlt}
-              transform="rotate(-14 22 77)"
-              variants={leafVariants}
+              style={{ scale: leafScale, opacity: leafOpacity, rotate: leafRotateLeft, transformOrigin: "22px 77px" }}
             />
           </>
         )}
@@ -194,8 +301,8 @@ export default function PortalGrowth({
               stroke={palette.vine}
               strokeWidth="1.15"
               strokeLinecap="round"
-              filter={`url(#glow-${variant})`}
-              variants={vineVariants}
+              filter={`url(#${filterId})`}
+              style={{ pathLength: vinePrimary, opacity: vineOpacityPrimary }}
             />
             <motion.path
               d="M 72 96 C 70 84, 66 74, 59 64 C 53 55, 51 45, 51 28"
@@ -203,8 +310,8 @@ export default function PortalGrowth({
               stroke={palette.vine}
               strokeWidth="1.15"
               strokeLinecap="round"
-              filter={`url(#glow-${variant})`}
-              variants={vineVariants}
+              filter={`url(#${filterId})`}
+              style={{ pathLength: vinePrimary, opacity: vineOpacityPrimary }}
             />
             <motion.path
               d="M 50 96 C 50 88, 50 80, 50 72"
@@ -212,8 +319,8 @@ export default function PortalGrowth({
               stroke={palette.vine}
               strokeWidth="0.82"
               strokeLinecap="round"
-              filter={`url(#glow-${variant})`}
-              variants={vineVariants}
+              filter={`url(#${filterId})`}
+              style={{ pathLength: vineSecondary, opacity: vineOpacitySecondary }}
             />
 
             <motion.ellipse
@@ -222,8 +329,7 @@ export default function PortalGrowth({
               rx="1.8"
               ry="4.3"
               fill={palette.leaf}
-              transform="rotate(-30 39 67)"
-              variants={leafVariants}
+              style={{ scale: leafScale, opacity: leafOpacity, rotate: leafRotateLeft, transformOrigin: "39px 67px" }}
             />
             <motion.ellipse
               cx="61"
@@ -231,8 +337,7 @@ export default function PortalGrowth({
               rx="1.8"
               ry="4.3"
               fill={palette.leafAlt}
-              transform="rotate(28 61 65)"
-              variants={leafVariants}
+              style={{ scale: leafScale, opacity: leafOpacity, rotate: leafRotateRight, transformOrigin: "61px 65px" }}
             />
             <motion.ellipse
               cx="45"
@@ -240,8 +345,7 @@ export default function PortalGrowth({
               rx="1.55"
               ry="3.6"
               fill={palette.leafAlt}
-              transform="rotate(18 45 52)"
-              variants={leafVariants}
+              style={{ scale: leafScale, opacity: leafOpacity, rotate: leafRotateRight, transformOrigin: "45px 52px" }}
             />
             <motion.ellipse
               cx="56"
@@ -249,13 +353,12 @@ export default function PortalGrowth({
               rx="1.55"
               ry="3.6"
               fill={palette.leaf}
-              transform="rotate(-18 56 50)"
-              variants={leafVariants}
+              style={{ scale: leafScale, opacity: leafOpacity, rotate: leafRotateLeft, transformOrigin: "56px 50px" }}
             />
           </>
         )}
 
-        {variant === "opportunities" && (
+        {variant === "opportunities" && !mobile && (
           <>
             <motion.path
               d="M 92 96 C 90 82, 86 70, 80 60 C 76 53, 73 44, 72 30"
@@ -263,8 +366,8 @@ export default function PortalGrowth({
               stroke={palette.vine}
               strokeWidth="1.15"
               strokeLinecap="round"
-              filter={`url(#glow-${variant})`}
-              variants={vineVariants}
+              filter={`url(#${filterId})`}
+              style={{ pathLength: vinePrimary, opacity: vineOpacityPrimary }}
             />
             <motion.path
               d="M 82 88 C 78 78, 74 68, 69 56 C 66 49, 64 41, 64 26"
@@ -272,8 +375,8 @@ export default function PortalGrowth({
               stroke={palette.vine}
               strokeWidth="0.9"
               strokeLinecap="round"
-              filter={`url(#glow-${variant})`}
-              variants={vineVariants}
+              filter={`url(#${filterId})`}
+              style={{ pathLength: vineSecondary, opacity: vineOpacitySecondary }}
             />
             <motion.path
               d="M 80 60 C 75 57, 71 53, 66 48"
@@ -281,8 +384,8 @@ export default function PortalGrowth({
               stroke={palette.vine}
               strokeWidth="0.78"
               strokeLinecap="round"
-              filter={`url(#glow-${variant})`}
-              variants={vineVariants}
+              filter={`url(#${filterId})`}
+              style={{ pathLength: vineBranch, opacity: vineOpacityBranch }}
             />
 
             <motion.ellipse
@@ -291,8 +394,7 @@ export default function PortalGrowth({
               rx="1.8"
               ry="4.8"
               fill={palette.leaf}
-              transform="rotate(8 74 67)"
-              variants={leafVariants}
+              style={{ scale: leafScale, opacity: leafOpacity, rotate: leafRotateRight, transformOrigin: "74px 67px" }}
             />
             <motion.ellipse
               cx="67"
@@ -300,8 +402,7 @@ export default function PortalGrowth({
               rx="1.55"
               ry="4.2"
               fill={palette.leafAlt}
-              transform="rotate(-24 67 55)"
-              variants={leafVariants}
+              style={{ scale: leafScale, opacity: leafOpacity, rotate: leafRotateLeft, transformOrigin: "67px 55px" }}
             />
             <motion.ellipse
               cx="78"
@@ -309,8 +410,7 @@ export default function PortalGrowth({
               rx="1.45"
               ry="3.7"
               fill={palette.leafAlt}
-              transform="rotate(14 78 77)"
-              variants={leafVariants}
+              style={{ scale: leafScale, opacity: leafOpacity, rotate: leafRotateRight, transformOrigin: "78px 77px" }}
             />
           </>
         )}
