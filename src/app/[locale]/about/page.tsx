@@ -28,27 +28,27 @@ export default async function AboutPage({
           heroEyebrow: "Sobre",
           heroTitle: "Pó de Ser",
           heroIntro:
-            "Associação juvenil de Palmela que cruza arte, bem-estar e mobilidade internacional.",
+            "Associação juvenil de Palmela, Portugal, que cruza arte, bem-estar e mobilidade internacional.",
 
           identityTitle: "Quem somos",
           identityText1:
-            "Fundada em dezembro de 2022, em Palmela, a Pó de Ser é uma associação juvenil que cria experiências onde arte, bem-estar, mobilidade internacional e participação se cruzam de forma humana, sensível e transformadora.",
+            "Fundada em dezembro de 2022, em Palmela, Portugal, a Pó de Ser é uma associação juvenil que cria experiências onde arte, bem-estar e mobilidade internacional se encontram de forma humana, sensível e transformadora.",
           identityText2:
-            "A partir de Palmela, desenvolvemos projetos locais e internacionais que aproximam pessoas, ideias e percursos diferentes. Interessa-nos criar contextos onde a criatividade, a consciência emocional, o contacto com a natureza, a sustentabilidade e a ligação humana façam parte do caminho. Para nós, estas dimensões não aparecem separadas: encontram-se na forma como aprendemos, convivemos e crescemos.",
+            "Desenvolvemos projetos locais e internacionais que ligam pessoas, ideias e percursos diferentes. Trabalhamos sobretudo através da educação não-formal e da participação juvenil, criando contextos vivos, acessíveis e significativos para os jovens.",
 
           storyTitle: "O que nos move",
           storyLead:
             "Acreditamos que aprender também pode ser criar, sentir, partilhar e parar para escutar.",
           storyText1:
-            "Queremos contribuir para experiências onde os jovens se possam relacionar consigo próprios, com os outros e com o mundo de forma mais consciente, criativa e participativa. Trabalhamos a partir da educação não-formal, da expressão artística, da mobilidade internacional e do cuidado humano, procurando criar processos que deixem marca não só nas competências, mas também na forma de estar.",
+            "Queremos criar experiências onde os jovens se relacionem consigo próprios, com os outros e com o mundo de forma mais consciente, criativa e participativa. Para isso, trabalhamos com expressão artística, cuidado humano, escuta, presença e ligação.",
           storyText2:
-            "Interessa-nos especialmente a ligação entre criatividade, emoções, bem-estar e presença. Ao mesmo tempo, valorizamos a relação com a natureza e uma atenção à sustentabilidade como parte de uma vida mais equilibrada, sensível e responsável.",
+            "Interessa-nos a forma como a criatividade, emoções e bem-estar se cruzam no crescimento pessoal e coletivo, valorizando também o contacto com a natureza e a sustentabilidade.",
 
           erasmusTitle: "Erasmus+ como ponto de partida",
           erasmusText1:
-            "A história da Pó de Ser está profundamente ligada ao Erasmus+. Foi neste universo que encontrámos oportunidades de aprendizagem, encontro e transformação que nos inspiraram a criar a associação. Hoje, o Erasmus+ continua a ser o foco principal do nosso trabalho, não apenas como programa de mobilidade, mas como espaço de educação, participação juvenil, interculturalidade e crescimento humano.",
+            "A história da Pó de Ser está profundamente ligada ao Erasmus+. Foi neste universo que encontrámos oportunidades de aprendizagem, encontro e transformação que nos inspiraram a criar a associação.",
           erasmusText2:
-            "É a partir dele que desenhamos muitos dos nossos projetos, intercâmbios, formações e experiências internacionais, sempre com a intenção de criar contextos vivos, acessíveis e significativos para os jovens. Procuramos também que essas experiências abram espaço para a criatividade, a consciência emocional, o contacto com a natureza, a sustentabilidade e formas mais humanas de viver em comunidade.",
+            "Hoje, o Erasmus+ continua a ser o foco principal do nosso trabalho: não apenas como programa de mobilidade, mas como espaço de educação, participação juvenil, interculturalidade e crescimento humano. A partir dele, criamos projetos que promovem encontros significativos para os jovens e para as comunidades onde participam.",
 
           teamTitle: "Equipa",
           teamIntro:
@@ -63,27 +63,27 @@ export default async function AboutPage({
           heroEyebrow: "About",
           heroTitle: "Pó de Ser",
           heroIntro:
-            "A youth association from Palmela connecting art, well-being, and international mobility.",
+            "A youth association from Palmela, Portugal, connecting art, well-being, and international mobility.",
 
           identityTitle: "Who we are",
           identityText1:
-            "Founded in December 2022, in Palmela, Pó de Ser is a youth association that creates experiences where art, well-being, international mobility, and participation meet in a human, sensitive, and transformative way.",
+            "Founded in December 2022, in Palmela, Portugal, Pó de Ser is a youth association that creates experiences where art, well-being, and international mobility meet in a human, sensitive, and transformative way.",
           identityText2:
-            "From Palmela, we develop local and international projects that bring together different people, ideas, and paths. We are interested in creating contexts where creativity, emotional awareness, contact with nature, sustainability, and human connection are part of the journey. For us, these dimensions do not appear separately: they meet in the way we learn, relate, and grow.",
+            "We develop local and international projects that connect different people, ideas, and paths. We work mainly through non-formal education and youth participation, creating living, accessible, and meaningful contexts for young people.",
 
           storyTitle: "What moves us",
           storyLead:
-            "We believe learning can also mean creating, feeling, sharing, and pausing to listen.",
+            "We believe learning can also mean creating, feeling, sharing and taking time to listen.",
           storyText1:
-            "We want to contribute to experiences where young people can relate to themselves, to others, and to the world in a more conscious, creative, and participatory way. We work through non-formal education, artistic expression, international mobility, and human care, aiming to create processes that leave a mark not only on skills, but also on ways of being.",
+            "We aim to create experiences where young people can connect with themselves, with others and with the world in a more conscious, creative and participatory way. To do this, we work with artistic expression, human care, listening, presence and connection.",
           storyText2:
-            "We are especially interested in the connection between creativity, emotions, well-being, and presence. At the same time, we value the relationship with nature and an attention to sustainability as part of a more balanced, sensitive, and responsible way of living.",
+            "We are especially interested in how creativity, emotions and well-being come together in personal and collective growth, while also valuing contact with nature and sustainability.",
 
           erasmusTitle: "Erasmus+ as a starting point",
           erasmusText1:
-            "Pó de Ser’s story is deeply connected to Erasmus+. It was in this universe that we found learning, encounter, and transformation opportunities that inspired us to create the association. Today, Erasmus+ remains the main focus of our work, not only as a mobility programme, but as a space for education, youth participation, interculturality, and human growth.",
+            "The story of Pó de Ser is deeply connected to Erasmus+. It was within this universe that we found opportunities for learning, connection and transformation, which inspired us to create the association.",
           erasmusText2:
-            "From that foundation, we design many of our projects, exchanges, training courses, and international experiences, always with the intention of creating living, accessible, and meaningful contexts for young people. We also try to ensure that these experiences open space for creativity, emotional awareness, contact with nature, sustainability, and more human ways of living in community.",
+            "Today, Erasmus+ remains the main focus of our work: not only as a mobility programme, but as a space for education, youth participation, interculturality and human growth. Through it, we create projects that foster meaningful encounters for young people and the communities they take part in.",
 
           teamTitle: "Team",
           teamIntro:
@@ -100,35 +100,35 @@ export default async function AboutPage({
       <Navbar locale={currentLocale} />
 
       <main>
-<section className="relative min-h-[calc(100svh-72px)] overflow-hidden bg-[var(--ink)] text-white">
-  <Image
-    src="/about/about-cover.jpg"
-    alt="Pó de Ser team"
-    fill
-    priority
-    sizes="100vw"
-    className="object-cover object-[center_25%]"
-  />
+        <section className="relative min-h-[calc(100svh-72px)] overflow-hidden bg-[var(--ink)] text-white">
+          <Image
+            src="/about/about-cover.jpg"
+            alt="Pó de Ser team"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-[center_25%]"
+          />
 
-  <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,12,15,0.18),rgba(15,12,15,0.10)_24%,rgba(15,12,15,0.34)_68%,rgba(15,12,15,0.82)_100%)]" />
-  <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-b from-transparent via-[rgba(247,241,232,0.08)] to-[var(--cream)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,12,15,0.18),rgba(15,12,15,0.10)_24%,rgba(15,12,15,0.34)_68%,rgba(15,12,15,0.82)_100%)]" />
+          <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-b from-transparent via-[rgba(247,241,232,0.08)] to-[var(--cream)]" />
 
-  <div className="relative mx-auto flex min-h-[calc(100svh-72px)] max-w-6xl items-end px-6 py-14 md:py-18">
-    <ScrollReveal className="max-w-3xl" y={24}>
-      <p className="mb-4 text-sm uppercase tracking-[0.22em] text-white/80">
-        {copy.heroEyebrow}
-      </p>
+          <div className="relative mx-auto flex min-h-[calc(100svh-72px)] max-w-6xl items-end px-6 py-14 md:py-18">
+            <ScrollReveal className="max-w-3xl" y={24}>
+              <p className="mb-4 text-sm uppercase tracking-[0.22em] text-white/80">
+                {copy.heroEyebrow}
+              </p>
 
-      <h1 className="text-5xl leading-[1.02] font-semibold md:text-7xl">
-        {copy.heroTitle}
-      </h1>
+              <h1 className="text-5xl leading-[1.02] font-semibold md:text-7xl">
+                {copy.heroTitle}
+              </h1>
 
-      <p className="mt-6 max-w-3xl text-lg leading-8 text-white/82">
-        {copy.heroIntro}
-      </p>
-    </ScrollReveal>
-  </div>
-</section>
+              <p className="mt-6 max-w-3xl text-lg leading-8 text-white/82">
+                {copy.heroIntro}
+              </p>
+            </ScrollReveal>
+          </div>
+        </section>
 
         <section className="bg-white">
           <div className="mx-auto max-w-6xl px-6 py-20">
@@ -164,17 +164,21 @@ export default async function AboutPage({
 
         <section className="bg-[var(--cream)]">
           <div className="mx-auto max-w-6xl px-6 py-20">
-            <div className="grid gap-10 lg:grid-cols-[0.58fr_0.42fr] lg:items-start">
-              <ScrollReveal>
-                <p className="text-sm uppercase tracking-[0.22em] text-[var(--brand)]">
+            <ScrollReveal className="max-w-6xl">
+              <h2 className="max-w-5xl text-3xl leading-tight font-semibold text-[var(--ink)] md:text-5xl md:leading-[1.08]">
+                {copy.storyLead}
+              </h2>
+
+                
+            </ScrollReveal>
+
+<div className="mt-14 grid gap-10 lg:grid-cols-[0.58fr_0.42fr] lg:items-start">
+                <ScrollReveal>
+                  <p className="mt-4 text-sm uppercase tracking-[0.22em] text-[var(--brand)]">
                   {copy.storyTitle}
                 </p>
 
-                <p className="mt-6 text-2xl leading-tight font-semibold text-[var(--ink)] md:text-3xl">
-                  {copy.storyLead}
-                </p>
-
-                <p className="mt-6 text-lg leading-8 text-[var(--muted)]">
+                <p className="mt-5 text-lg leading-8 text-[var(--muted)]">
                   {copy.storyText1}
                 </p>
 

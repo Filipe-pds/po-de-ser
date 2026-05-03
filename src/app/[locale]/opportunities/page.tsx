@@ -82,6 +82,15 @@ function OpportunityCard({
   );
   const displayAge = formatAgeRange(item.ageMin, item.ageMax, locale);
 
+  const kindTone =
+    item.kind === "training-course"
+      ? "border-[rgba(170,214,206,0.55)] bg-[rgba(170,214,206,0.18)] text-[rgb(229,248,243)]"
+      : item.kind === "youth-exchange"
+        ? "border-[rgba(210,150,159,0.55)] bg-[rgba(210,150,159,0.18)] text-[rgb(255,234,238)]"
+        : item.kind === "esc"
+          ? "border-[rgba(224,188,132,0.55)] bg-[rgba(224,188,132,0.18)] text-[rgb(255,241,219)]"
+          : "border-white/20 bg-white/10 text-white";
+
   return (
     <article
       className={`group relative min-h-[34rem] overflow-hidden rounded-[2rem] ring-1 ring-black/5 shadow-[0_14px_34px_rgba(0,0,0,0.06)] ${
@@ -112,13 +121,15 @@ function OpportunityCard({
       <div className="relative z-10 flex min-h-[34rem] flex-col p-6 text-white md:p-7">
         <div className="flex flex-wrap items-center gap-3">
           {item.kind ? (
-            <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs backdrop-blur-sm">
+            <span
+              className={`rounded-full border px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.16em] backdrop-blur-sm ${kindTone}`}
+            >
               {formatKind(item.kind, locale)}
             </span>
           ) : null}
 
           {displayCountry ? (
-            <span className="text-xs uppercase tracking-[0.18em] text-white/88">
+            <span className="rounded-full border border-white/20 bg-black/18 px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-white/95 backdrop-blur-sm">
               {displayCountry}
             </span>
           ) : null}
@@ -265,7 +276,7 @@ intro:
         }
       : {
           eyebrow: "Opportunities",
-          title: "From Sust, new ways of Being emerge.",
+          title: "From Dust, new ways of Being emerge.",
 intro:
   "Youth Exchanges, Training Courses, and other international experiences.",
           openEyebrow: "Applications",
@@ -402,123 +413,103 @@ intro:
           </div>
         </section>
 
-        <section id="erasmus-explained" className="bg-white/45">
-          <div className="mx-auto max-w-6xl px-6 py-14 md:py-16">
-            <SectionHeading
-              eyebrow={pageCopy.explainEyebrow}
-              title={pageCopy.explainTitle}
-              text={pageCopy.explainIntro}
-            />
+<section id="erasmus-explained" className="bg-white/40">
+  <div className="mx-auto max-w-6xl px-6 py-14 md:py-16">
+    <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
+      <div className="max-w-2xl">
+        <p className="mb-3 text-sm uppercase tracking-[0.22em] text-[var(--brand)]">
+          Erasmus+
+        </p>
 
-            <div className="mt-10 grid gap-6 md:grid-cols-3">
-              <InfoCard
-                title={pageCopy.erasmusCard1Title}
-                text={pageCopy.erasmusCard1Text}
-              />
-              <InfoCard
-                title={pageCopy.erasmusCard2Title}
-                text={pageCopy.erasmusCard2Text}
-              />
-              <InfoCard
-                title={pageCopy.erasmusCard3Title}
-                text={pageCopy.erasmusCard3Text}
-              />
-            </div>
-          </div>
-        </section>
+        <h2 className="text-3xl font-semibold leading-[1.08] text-[var(--ink)] md:text-4xl">
+          {currentLocale === "pt" ? "O que é o Erasmus+?" : "What is Erasmus+?"}
+        </h2>
 
-        <section className="bg-[var(--cream)]">
-          <div className="mx-auto max-w-6xl px-6 py-14 md:py-16">
-            <SectionHeading
-              title={pageCopy.resourcesTitle}
-              text={pageCopy.resourcesIntro}
-            />
+        <p className="mt-4 text-base leading-7 text-[var(--muted)] md:text-lg md:leading-8">
+          {currentLocale === "pt"
+            ? "O Erasmus+ é o programa da União Europeia que apoia oportunidades de aprendizagem, mobilidade e cooperação. Na área da juventude, permite a participação em experiências internacionais de educação não-formal, encontro intercultural e desenvolvimento pessoal."
+            : "Erasmus+ is the European Union programme that supports learning, mobility, and cooperation opportunities. In the youth field, it enables participation in international non-formal education experiences, intercultural exchange, and personal development."}
+        </p>
+      </div>
 
-            <div className="mt-10 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-              <div className="rounded-[1.75rem] bg-white/82 p-6 shadow-sm ring-1 ring-black/5 backdrop-blur-sm md:p-7">
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <a
-                    href="https://erasmus-plus.ec.europa.eu/"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="rounded-[1.25rem] border border-black/5 bg-[var(--cream)]/70 p-4 transition hover:border-[var(--brand)]/30 hover:bg-white"
-                  >
-                    <p className="font-medium text-[var(--ink)]">
-                      {pageCopy.generalLink}
-                    </p>
-                    <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-                      Erasmus+
-                    </p>
-                  </a>
+      <div className="grid gap-5 md:grid-cols-2">
+        <article className="rounded-[1.6rem] bg-white/78 p-6 shadow-sm ring-1 ring-black/5 backdrop-blur-sm md:p-7">
+          <h3 className="text-xl font-semibold text-[var(--brand)]">
+            {currentLocale === "pt" ? "Intercâmbios juvenis" : "Youth Exchanges"}
+          </h3>
 
-                  <a
-                    href="https://erasmus-plus.ec.europa.eu/programme-guide/part-b/key-action-1/youth-exchanges"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="rounded-[1.25rem] border border-black/5 bg-[var(--cream)]/70 p-4 transition hover:border-[var(--brand)]/30 hover:bg-white"
-                  >
-                    <p className="font-medium text-[var(--ink)]">
-                      {pageCopy.youthExchangesLink}
-                    </p>
-                    <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-                      Erasmus+ Programme Guide
-                    </p>
-                  </a>
+          <p className="mt-4 leading-7 text-[var(--muted)]">
+            {currentLocale === "pt"
+              ? "Reúnem grupos de jovens de diferentes países para explorar um tema comum através de workshops, dinâmicas, atividades criativas, reflexão e intercâmbio cultural."
+              : "They bring together groups of young people from different countries to explore a shared theme through workshops, group dynamics, creative activities, reflection, and intercultural exchange."}
+          </p>
+        </article>
 
-                  <a
-                    href="https://erasmus-plus.ec.europa.eu/programme-guide/part-b/key-action-1/youth-workers"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="rounded-[1.25rem] border border-black/5 bg-[var(--cream)]/70 p-4 transition hover:border-[var(--brand)]/30 hover:bg-white"
-                  >
-                    <p className="font-medium text-[var(--ink)]">
-                      {pageCopy.trainingCoursesLink}
-                    </p>
-                    <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-                      Erasmus+ Programme Guide
-                    </p>
-                  </a>
+        <article className="rounded-[1.6rem] bg-white/78 p-6 shadow-sm ring-1 ring-black/5 backdrop-blur-sm md:p-7">
+          <h3 className="text-xl font-semibold text-[var(--brand)]">
+            {currentLocale === "pt" ? "Cursos de formação" : "Training Courses"}
+          </h3>
 
-                  <a
-                    href="https://www.juventude.pt/pt/"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="rounded-[1.25rem] border border-black/5 bg-[var(--cream)]/70 p-4 transition hover:border-[var(--brand)]/30 hover:bg-white"
-                  >
-                    <p className="font-medium text-[var(--ink)]">
-                      {pageCopy.agencyLink}
-                    </p>
-                    <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-                      Juventude.pt
-                    </p>
-                  </a>
-                </div>
-              </div>
+          <p className="mt-4 leading-7 text-[var(--muted)]">
+            {currentLocale === "pt"
+              ? "Destinam-se sobretudo a youth workers, facilitadores e pessoas ativas no trabalho com jovens, com foco na aprendizagem de métodos, partilha de práticas e criação de novas parcerias."
+              : "They are mainly for youth workers, facilitators, and people active in youth work, with a focus on learning methods, sharing practices, and building new partnerships."}
+          </p>
+        </article>
+      </div>
+    </div>
 
-              <div className="rounded-[1.75rem] bg-white/82 p-6 shadow-sm ring-1 ring-black/5 backdrop-blur-sm md:p-7">
-                <div className="flex h-full flex-col justify-between">
-                  <div>
-                    <h3 className="text-xl font-semibold text-[var(--brand)]">
-                      {pageCopy.agencyTitle}
-                    </h3>
+    <div className="mt-10 rounded-[1.75rem] bg-white/72 p-6 shadow-sm ring-1 ring-black/5 backdrop-blur-sm md:p-7">
+      <p className="text-sm leading-6 text-[var(--muted)]">
+        {currentLocale === "pt"
+          ? "Para perceber melhor como funciona, consulta aqui a informação oficial."
+          : "To understand how it works better, explore the official information here."}
+      </p>
 
-                    <p className="mt-4 leading-7 text-[var(--muted)]">
-                      {pageCopy.agencyText}
-                    </p>
-                  </div>
+      <div className="mt-5 grid gap-4 md:grid-cols-2">
+        <a
+          href="https://erasmus-plus.ec.europa.eu/"
+          target="_blank"
+          rel="noreferrer"
+          className="flex min-h-[8.5rem] items-center justify-center rounded-[1.4rem] border border-black/5 bg-[var(--cream)]/70 p-5 transition hover:border-[var(--brand)]/30 hover:bg-white"
+          aria-label={
+            currentLocale === "pt"
+              ? "Abrir página oficial Erasmus+"
+              : "Open official Erasmus+ page"
+          }
+        >
+          <Image
+            src="/opportunities/logo-erasmus.png"
+            alt="Erasmus+ / European Union"
+            width={210}
+            height={80}
+            className="h-auto max-h-14 w-auto object-contain md:max-h-16"
+          />
+        </a>
 
-                  <div className="mt-8 rounded-[1.25rem] border border-black/5 bg-[var(--cream)]/70 p-4">
-                    <img
-                      src="/partners/juventude-logo.png"
-                      alt="Agência Nacional Erasmus+ Juventude / Desporto e Corpo Europeu de Solidariedade"
-                      className="h-16 w-auto object-contain"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <a
+          href="https://www.juventude.pt/pt/"
+          target="_blank"
+          rel="noreferrer"
+          className="flex min-h-[8.5rem] items-center justify-center rounded-[1.4rem] border border-black/5 bg-[var(--cream)]/70 p-5 transition hover:border-[var(--brand)]/30 hover:bg-white"
+          aria-label={
+            currentLocale === "pt"
+              ? "Abrir Juventude.pt"
+              : "Open Juventude.pt"
+          }
+        >
+          <Image
+            src="/opportunities/logo-na.png"
+            alt="Agência Nacional Erasmus+ Juventude / Desporto e Corpo Europeu de Solidariedade"
+            width={260}
+            height={90}
+            className="h-auto max-h-14 w-auto object-contain md:max-h-16"
+          />
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
 
         {closedItems.length > 0 ? (
           <section className="bg-white/45">
@@ -527,6 +518,7 @@ intro:
 
               <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
                 {closedItems.map((item) => (
+
                   <OpportunityCard
                     key={item._id}
                     item={item}

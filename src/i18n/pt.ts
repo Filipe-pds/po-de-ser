@@ -157,7 +157,7 @@ refundText:
   "Se um participante desistir do projeto após a compra da viagem, não poderá receber reembolso.",
 membershipTitle: "Associação Pó de Ser",
 membershipText:
-  "Todos os participantes selecionados devem tornar-se membros da Associação Pó de Ser. A quota anual custa 18€ (1,5€/mês). Se não tiveres meios financeiros, isso não deve ser uma barreira à tua participação. Fala connosco 🙂",
+  "Todos os participantes selecionados devem tornar-se membros da Associação Pó de Ser. A quota anual custa 18€ (1,5€/mês). Se não tiveres meios financeiros, isso não deve ser uma barreira à tua participação. Fala connosco!!",
   closedBanner: "Candidaturas Fechadas",
   contact: "Entrar em contacto",
   helpTitle: "Tens dúvidas sobre a candidatura?",
