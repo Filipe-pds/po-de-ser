@@ -53,11 +53,6 @@ export default async function AboutPage({
           teamTitle: "Equipa",
           teamIntro:
             "A Pó de Ser é construída por pessoas com diferentes sensibilidades, percursos e competências, unidas pela vontade de criar oportunidades significativas para jovens.",
-
-          emailLabel: "Email",
-          instagramLabel: "Instagram",
-          linkedinLabel: "LinkedIn",
-          websiteLabel: "Website",
         }
       : {
           heroEyebrow: "About",
@@ -88,11 +83,6 @@ export default async function AboutPage({
           teamTitle: "Team",
           teamIntro:
             "Pó de Ser is built by people with different sensitivities, paths, and skills, united by the desire to create meaningful opportunities for young people.",
-
-          emailLabel: "Email",
-          instagramLabel: "Instagram",
-          linkedinLabel: "LinkedIn",
-          websiteLabel: "Website",
         };
 
   return (
@@ -138,7 +128,7 @@ export default async function AboutPage({
                   {copy.identityTitle}
                 </p>
 
-                <div className="mt-8 relative aspect-square w-[150px] sm:w-[170px] lg:w-[190px]">
+                <div className="relative mt-8 aspect-square w-[150px] sm:w-[170px] lg:w-[190px]">
                   <Image
                     src="/branding/logo-better.png"
                     alt="Pó de Ser logo"
@@ -165,16 +155,14 @@ export default async function AboutPage({
         <section className="bg-[var(--cream)]">
           <div className="mx-auto max-w-6xl px-6 py-20">
             <ScrollReveal className="max-w-6xl">
-              <h2 className="max-w-5xl text-3xl leading-tight font-semibold text-[var(--ink)] md:text-5xl md:leading-[1.08]">
+              <h2 className="max-w-5xl text-3xl font-semibold leading-tight text-[var(--ink)] md:text-5xl md:leading-[1.08]">
                 {copy.storyLead}
               </h2>
-
-                
             </ScrollReveal>
 
-<div className="mt-14 grid gap-10 lg:grid-cols-[0.58fr_0.42fr] lg:items-start">
-                <ScrollReveal>
-                  <p className="mt-4 text-sm uppercase tracking-[0.22em] text-[var(--brand)]">
+            <div className="mt-14 grid gap-10 lg:grid-cols-[0.58fr_0.42fr] lg:items-start">
+              <ScrollReveal>
+                <p className="text-sm uppercase tracking-[0.22em] text-[var(--brand)]">
                   {copy.storyTitle}
                 </p>
 
@@ -245,11 +233,15 @@ export default async function AboutPage({
               </p>
             </ScrollReveal>
 
-            <div className="mt-14 grid gap-x-10 gap-y-16 md:grid-cols-2 xl:grid-cols-3">
+            <div className="mt-14 grid items-stretch gap-x-10 gap-y-16 md:grid-cols-2 xl:grid-cols-3">
               {teamMembers.map((member, index) => (
-                <ScrollReveal key={member.name} delay={index * 0.1}>
-                  <article className="relative">
-                    <div className="group relative">
+                <ScrollReveal
+                  key={member.name}
+                  delay={index * 0.1}
+                  className="h-full"
+                >
+                  <article className="relative h-full">
+                    <div className="group flex h-full flex-col">
                       <div className="relative aspect-[4/4] overflow-visible">
                         <div className="relative h-full w-full overflow-hidden rounded-t-[1.75rem] bg-[var(--cream)]">
                           <Image
@@ -299,64 +291,15 @@ export default async function AboutPage({
                         ) : null}
                       </div>
 
-                      <div className="rounded-b-[1.75rem] bg-white p-6 shadow-sm ring-1 ring-black/5">
+                      <div className="flex flex-1 flex-col rounded-b-[1.75rem] bg-white p-6 shadow-sm ring-1 ring-black/5">
                         <h3 className="text-2xl font-semibold text-[var(--ink)]">
                           {member.name}
                         </h3>
 
-                        <p className="mt-2 text-sm uppercase tracking-[0.16em] text-[var(--brand)]">
-                          {member.role[currentLocale]}
-                        </p>
 
                         <p className="mt-4 leading-7 text-[var(--muted)]">
                           {member.bio[currentLocale]}
                         </p>
-
-                        {member.links ? (
-                          <div className="mt-5 flex flex-wrap gap-3">
-                            {member.links.email ? (
-                              <a
-                                href={`mailto:${member.links.email}`}
-                                className="rounded-full border border-[var(--ink)] px-4 py-2 text-sm text-[var(--ink)] transition hover:bg-[var(--ink)] hover:text-white"
-                              >
-                                {copy.emailLabel}
-                              </a>
-                            ) : null}
-
-                            {member.links.instagram ? (
-                              <a
-                                href={member.links.instagram}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="rounded-full border border-[var(--brand)] px-4 py-2 text-sm text-[var(--brand)] transition hover:bg-[var(--brand)] hover:text-white"
-                              >
-                                {copy.instagramLabel}
-                              </a>
-                            ) : null}
-
-                            {member.links.linkedin ? (
-                              <a
-                                href={member.links.linkedin}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="rounded-full border border-[var(--brand)] px-4 py-2 text-sm text-[var(--brand)] transition hover:bg-[var(--brand)] hover:text-white"
-                              >
-                                {copy.linkedinLabel}
-                              </a>
-                            ) : null}
-
-                            {member.links.website ? (
-                              <a
-                                href={member.links.website}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="rounded-full border border-[var(--brand)] px-4 py-2 text-sm text-[var(--brand)] transition hover:bg-[var(--brand)] hover:text-white"
-                              >
-                                {copy.websiteLabel}
-                              </a>
-                            ) : null}
-                          </div>
-                        ) : null}
                       </div>
                     </div>
                   </article>

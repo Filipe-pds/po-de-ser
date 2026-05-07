@@ -95,6 +95,11 @@ export default function HomeMobilePortalCard({
     offset: ["start 92%", "end 24%"],
   });
 
+  const { scrollYProgress: centerProgress } = useScroll({
+    target: ref,
+    offset: ["center end", "center start"],
+  });
+
   const mistOpacity = useTransform(scrollYProgress, [0, 0.22, 0.55, 1], [0.45, 0.6, 0.88, 1]);
   const sparkOpacity = useTransform(scrollYProgress, [0, 0.22, 0.58, 1], [0.22, 0.4, 0.82, 0.95]);
   const sparkScale = useTransform(scrollYProgress, [0, 0.3, 0.65, 1], [0.82, 0.92, 1, 1.08]);
@@ -166,7 +171,7 @@ export default function HomeMobilePortalCard({
           }}
         >
           <div className={`${growthPosition} pointer-events-none overflow-visible`}>
-            <PortalGrowth variant={variant} progress={scrollYProgress} mobile />
+            <PortalGrowth variant={variant} progress={centerProgress} mobile />
           </div>
 
           <div
