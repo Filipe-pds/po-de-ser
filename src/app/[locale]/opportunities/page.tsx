@@ -84,16 +84,16 @@ function OpportunityCard({
 
   const kindTone =
     item.kind === "training-course"
-      ? "border-[rgba(170,214,206,0.55)] bg-[rgba(170,214,206,0.18)] text-[rgb(229,248,243)]"
+      ? "border-[rgba(170,214,206,0.78)] bg-[rgba(170,214,206,0.32)] text-white"
       : item.kind === "youth-exchange"
-        ? "border-[rgba(210,150,159,0.55)] bg-[rgba(210,150,159,0.18)] text-[rgb(255,234,238)]"
+        ? "border-[rgba(210,150,159,0.78)] bg-[rgba(210,150,159,0.32)] text-white"
         : item.kind === "esc"
-          ? "border-[rgba(224,188,132,0.55)] bg-[rgba(224,188,132,0.18)] text-[rgb(255,241,219)]"
-          : "border-white/20 bg-white/10 text-white";
+          ? "border-[rgba(224,188,132,0.78)] bg-[rgba(224,188,132,0.32)] text-white"
+          : "border-white/25 bg-white/18 text-white";
 
   return (
     <article
-      className={`group relative min-h-[34rem] overflow-hidden rounded-[2rem] ring-1 ring-black/5 shadow-[0_14px_34px_rgba(0,0,0,0.06)] ${
+      className={`group relative flex h-full min-h-[34rem] overflow-hidden rounded-[2rem] ring-1 ring-black/5 shadow-[0_14px_34px_rgba(0,0,0,0.06)] ${
         status === "closed" ? "opacity-85" : ""
       }`}
     >
@@ -109,27 +109,21 @@ function OpportunityCard({
         <div className="absolute inset-0 bg-[linear-gradient(180deg,#44323a_0%,#252028_100%)]" />
       )}
 
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(20,16,20,0.10)_0%,rgba(20,16,20,0.36)_22%,rgba(20,16,20,0.72)_58%,rgba(20,16,20,0.94)_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(20,16,20,0.10)_0%,rgba(20,16,20,0.34)_20%,rgba(20,16,20,0.72)_58%,rgba(20,16,20,0.95)_100%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.08),transparent_32%)]" />
 
-      {status === "closed" ? (
-        <div className="absolute right-4 top-4 z-20 rounded-full bg-white/92 px-3 py-1 text-xs font-medium text-[var(--ink)] shadow-sm">
-          {labels.closedBanner}
-        </div>
-      ) : null}
-
-      <div className="relative z-10 flex min-h-[34rem] flex-col p-6 text-white md:p-7">
+      <div className="relative z-10 flex h-full min-h-[34rem] w-full flex-col p-6 text-white md:p-7">
         <div className="flex flex-wrap items-center gap-3">
           {item.kind ? (
             <span
-              className={`rounded-full border px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.16em] backdrop-blur-sm ${kindTone}`}
+              className={`rounded-full border px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] shadow-[0_4px_14px_rgba(0,0,0,0.12)] backdrop-blur-sm ${kindTone}`}
             >
               {formatKind(item.kind, locale)}
             </span>
           ) : null}
 
           {displayCountry ? (
-            <span className="rounded-full border border-white/20 bg-black/18 px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-white/95 backdrop-blur-sm">
+            <span className="rounded-full border border-white/22 bg-black/24 px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/95 backdrop-blur-sm">
               {displayCountry}
             </span>
           ) : null}
@@ -139,28 +133,30 @@ function OpportunityCard({
           <h3 className="text-3xl font-semibold leading-tight">{item.title}</h3>
 
           {displayProjectDates ? (
-            <p className="mt-3 text-base font-medium text-white/94">
-              {displayProjectDates}
-            </p>
+            <div className="mt-4 inline-flex max-w-full rounded-full border border-white/16 bg-black/22 px-4 py-2 text-sm font-semibold text-white/96 shadow-[0_6px_20px_rgba(0,0,0,0.12)] backdrop-blur-sm">
+              <span>{displayProjectDates}</span>
+            </div>
           ) : null}
 
           {displaySummary ? (
-            <p className="mt-4 max-w-[35ch] leading-7 text-white/84">
+            <p className="mt-5 max-w-[35ch] leading-7 text-white/84">
               {displaySummary}
             </p>
           ) : null}
 
-          <div className="mt-5 space-y-2 text-sm text-white/88">
+          <div className="mt-6 space-y-2 text-sm text-white/88">
             {displayAge ? (
               <p>
-                <span className="font-medium text-white">{labels.age}:</span>{" "}
+                <span className="font-semibold text-white">{labels.age}:</span>{" "}
                 {displayAge}
               </p>
             ) : null}
 
             {displayDeadline ? (
               <p>
-                <span className="font-medium text-white">{labels.deadline}:</span>{" "}
+                <span className="font-semibold text-white">
+                  {labels.deadline}:
+                </span>{" "}
                 {displayDeadline}
               </p>
             ) : null}
@@ -378,8 +374,7 @@ intro:
               </div>
             ) : (
               <>
-                <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-                  {openItems.map((item) => (
+              <div className="mt-10 grid items-stretch gap-6 md:grid-cols-2 xl:grid-cols-3">                  {openItems.map((item) => (
                     <OpportunityCard
                       key={item._id}
                       item={item}
@@ -516,8 +511,7 @@ intro:
             <div className="mx-auto max-w-6xl px-6 py-14 md:py-16">
               <SectionHeading title={pageCopy.closedTitle} />
 
-              <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-                {closedItems.map((item) => (
+<div className="mt-10 grid items-stretch gap-6 md:grid-cols-2 xl:grid-cols-3">                {closedItems.map((item) => (
 
                   <OpportunityCard
                     key={item._id}
